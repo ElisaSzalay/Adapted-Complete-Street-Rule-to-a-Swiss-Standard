@@ -1,4 +1,4 @@
-# Adapted-Complete-Street-Rule-to-a-Swiss-Style
+# Adapted-Complete-Street-Rule-to-a-Swiss-Standard
 This repository shows the code developed within the Bachelor Thesis named "Procedural modelling of urban mobility transitions: Case Study of an E-Bike City in Zurich" carried out by Elisa Szalay at ETH Zurich. The second part of the thesis carried out by Fabien Forestier showing the application of the code can be viewed here: https://github.com/foforestier/E-Bike_city_case_study_Zurich.
 
 # General Introduction to the thesis 
