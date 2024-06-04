@@ -14,4 +14,9 @@
 11. Assign the downloaded Rule File to the segment by clicking "Assign" next to the Rule File in the Inspector and navigating to the downloaded Rule File on your computer
 12. Finally, select a Start Rule by clicking "Select" next to the Start Rule in the Inspector (select "Street" to work with the adaptions provided by the downloaded Rule File)
 # Incorporating the Rule in an existing project
-
+1. Download or clone the Assets files and the code file to your device
+2. Open ArcGIS CityEngine on your device
+3. Copy or move the downloaded Rule file to "rules"-folder in the project folder you just created
+4.  Replace the "ESRI.lib"-folder with the downloaded folder "Assets_to_replace_Esrilib_assets"
+5.  Assign the downloaded Rule File to the segment by clicking "Assign" next to the Rule File in the Inspector and navigating to the downloaded Rule File on your computer
+6.   Finally, select a Start Rule by clicking "Select" next to the Start Rule in the Inspector (select "Street" to work with the adaptions provided by the downloaded Rule File)
