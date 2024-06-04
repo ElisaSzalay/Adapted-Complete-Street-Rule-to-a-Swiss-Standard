@@ -13,7 +13,7 @@ For further information of the Complete Street Rule, see https://github.com/d-wa
 In order to adapt the Complete Street Rule correctly to a Swiss Standard, various guidelines of the VSS and VBZ were consulted. As the thesis is about creating an E-Bike City that prioritises public transport and bikes over motorised traffic, the adaptation largely involved the creation of tram and bike infrastructure. Another large part involved drawing and adapting road markings. Further information on the exact adjustments can be found in the report accompanying the thesis.
 
 # Instructions
-Instructions on how to integrate the rules into an existing project or how to create a new project from scratch can be found here. 
+Instructions on how to integrate the rules into an existing project or how to create a new project from scratch can be found [here](Instructions.md). 
 
 # Citation of the thesis
 Forestier, F. and E. Szalay (2024), Procedural modelling of urban mobility transitions: Case study of an E-Bike City in Zurich, Bachelor Thesis, IVT, ETH Zürich, Zurich
