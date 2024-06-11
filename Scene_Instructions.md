@@ -10,7 +10,7 @@ Inspector:
   gerade-rechts, gerade-links, rechts, links)
   4. Set Center_Type to „White Stripe Centerline“ in order to create a full stop box
 - In case of an intersection without traffic lights and holding lines:
-  1 Stop_Begin or Stop_End (depending on which side of the road the arrow
+  1. Stop_Begin or Stop_End (depending on which side of the road the arrow
   should be) need to be set to „none“
   2. Set Pfeil_Farbe to „white“
   3. Set Richtungspfeil to the direction you want the arrow to display
