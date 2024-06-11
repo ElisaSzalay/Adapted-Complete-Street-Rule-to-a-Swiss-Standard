@@ -92,7 +92,7 @@ The two different configurations for tram stops are described here:
 - Tram stops on the sidewalk:
    1. The Start Rule needs to be set to „Sidewalk“
    2. Set Tramhaltestelle_Trottoir to the side of the road you’re on (left or right)
-   3. – Set Sidewalk_Bus_Stop to „Both“ and Sidewalk_Bus_Stop_Location to the
+   3. Set Sidewalk_Bus_Stop to „Both“ and Sidewalk_Bus_Stop_Location to the
 desired Location
    4. The white guiding lines can be controlled with the handles called Haltestelle_Rotation_links,
 Haltestelle_Translate_X_links, Haltestelle_Translate_Y_links and Haltestelle_Translate_Z_links
@@ -113,3 +113,30 @@ to 5.6 m
    7. Set Median_Bus_Stop to „Both“ and Median_Bus_Stop_Location to „Mid-
 Block“
    8. Set Inselhaltestelle to „beidseitig"
+
+# Pedestrian Protection Island
+In order to generate a pedestrain protection island, the following parameters are essential:
+- The Start Rule needs to be set to „Street“
+- Set Fussgaengeruebergang to „true“
+- Set Center_Type to „Median“
+- Set the Center_Width and WalkWay_Width to 2 m
+- If tram lanes are desired, set Transit_Lane to „Light Rail Lane“
+
+# Traffic lights and signs
+In order to display traffic lights and signs, the following instructions can be followed:
+- As both traffic lights and signs are located on the sidewalk, the Start Rule needs to
+be set to „Sidewalk“
+- To display traffic lights, set Traffic_Lights to the desired streetside
+- In order to display traffic signs choose from the wide selection of signs that come
+with the parameter Street_Sign
+- It is possible to control the position of the lights and signs with the handles
+Street_Sign_Rotation, Street_Sign_Translate_X, Street_Sign_Translate_Z and
+respectively for traffic lights
+
+# Bike Racks
+In order to display bike racks, the following instructions can be followed:
+- The Start Rule needs to be set to „Street“
+- Set Center_Type to „Median“
+- Set Median_Bike_Rack_CH to the side of the Median the objects should be inserted
+- It is possible to control the position of the bike racks with the handles SBike_Rack_Translate_X,
+SBike_Rack_Translate_Y and SBike_Rack_Translate_Z
