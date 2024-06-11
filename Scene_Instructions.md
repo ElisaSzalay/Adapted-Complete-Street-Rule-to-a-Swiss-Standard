@@ -1,3 +1,4 @@
+The following instructions should help you to familiarise yourself with the adjustments. Parameters that are not mentioned in each case can be left at their default values.  
 # Directional Arrows
 In order to display directional arrows, the following parameters must be selected in the
 Inspector:
