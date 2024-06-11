@@ -58,3 +58,58 @@ street) either Crosswalk_Begin or Crosswalk_End needs to be set to „continenta
 desired distance of the crosswalk to a chosen stop bar
 - Crosswalk_Color has to be „yellow“
 - Set the Crosswalk_Width to the desired width of the crosswalk
+
+# Street Markings
+The configuration in order to display different street markings are the following:
+- Again, the Start Rule needs to be set to „Street“
+- Set Center_Type to the desired type: „White Stripe Centerline“ for a white dashed
+centreline, „White Centerline“ for a white through centreline and a few others, whose
+names are quite self-explanatory
+
+# Tram lanes
+To generate tram lanes, the following parameters are necessary:
+- Again, the Start Rule needs to be set to „Street“
+- Set Transit_Lane to „Light Rail Lane“
+- Set Transit_Lane_Sides to „Both“
+- When creating pure tram lanes without motorised traffic, Transit_Lane_Width can
+be left on the default width of 3.15 m and the segment width needs to be 6.3 m
+- When creating a tram lane where the road space is shared with motorised traffic or
+bike lanes, Transit_Lane_Width can be left on the default width of 3.15 m but the
+segment width needs to be adjusted respecting the widths of the additional lanes
+
+# Bus lanes, 30 zones and speed limit 30
+In order to generate bus lanes, 30 zones or speed limit 30, the following parameters are
+essential:
+- As always, the Start Rule needs to be set to „Street“
+- Set Transit_Lane to „Bus Lane“, „Zone 30“ or „Tempo 30“
+- Set Transit_Lane_Sides to „Both“
+- When creating a transit lane where the road space is shared with bike lanes,
+Transit_Lane_Width can be left on the default width of 3.15m but the segment
+width needs to be adjusted respecting the width of the additional lanes
+
+# Tram stops
+The two different configurations for tram stops are described here:
+- Tram stops on the sidewalk:
+   1. The Start Rule needs to be set to „Sidewalk“
+   2. Set Tramhaltestelle_Trottoir to the side of the road you’re on (left or right)
+   3. – Set Sidewalk_Bus_Stop to „Both“ and Sidewalk_Bus_Stop_Location to the
+desired Location
+   4. The white guiding lines can be controlled with the handles called Haltestelle_Rotation_links,
+Haltestelle_Translate_X_links, Haltestelle_Translate_Y_links and Haltestelle_Translate_Z_links
+for a smooth placement it is advisable to first set Haltestelle_Rotation_links,
+then Haltestelle_Translate_X_links, Haltestelle_Translate_Z_links and at
+the end if necessary Haltestelle_Translate_Y_links (and respectively for the
+right side)
+- Tram stops as an island on the road:
+   1. The Start Rule needs to be set to „Street“
+   2. When creating tram stops as islands with an additional lane for motorized
+traffic with a width of 3.25 m on both outer sides the minimum Segment Width
+is 16.1 m
+   3. The Lane Width should be 3.25 m
+   4. Set Center_Type to „Boulevard“
+   5. Set Center_Width to 9.6 m, WalkWay_Width to 2 m and Boulevard_Inside_Width
+to 5.6 m
+   6. Boulevard_Configuration should be „Tram Lanes“
+   7. Set Median_Bus_Stop to „Both“ and Median_Bus_Stop_Location to „Mid-
+Block“
+   8. Set Inselhaltestelle to „beidseitig"
