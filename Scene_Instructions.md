@@ -3,7 +3,7 @@ In order to display directional arrows, the following parameters must be selecte
 Inspector:
 - The Start Rule needs to be set to „Street“
 - In case of an intersection with traffic lights:
-  – Stop_Begin or Stop_End (depending on which end of the road the arrow
+   – Stop_Begin or Stop_End (depending on which end of the road the arrow
   should be) need to be set to „line only“
   – Set Pfeil_Farbe to „white“
   – Set Richtungspfeil to the direction you want the arrow to display (gerade,
