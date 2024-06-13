@@ -1,5 +1,5 @@
 # Adapted-Complete-Street-Rule-to-a-Swiss-Standard
-This repository shows the code developed within the Bachelor Thesis named "Procedural modelling of urban mobility transitions: Case Study of an E-Bike City in Zurich" carried out by E. Szalay at ETH Zurich. The [Complete Street Rule](https://github.com/d-wasserman/Complete_Street_Rule) by D. Wasserman was used as a basis.
+This repository shows the code developed within the Bachelor Thesis named "Procedural modelling of urban mobility transitions: Case Study of an E-Bike City in Zurich" carried out by E. Szalay at ETH Zurich. The [Complete Street Rule](https://github.com/d-wasserman/Complete_Street_Rule)[^1] was used as a basis.
 
 # General Introduction to the thesis 
 Urban mobility plays a crucial role in the sustainable transformation of cities and requires profound organisational changes in today’s urban transport systems. The E-Bike City project at ETH Zurich addresses precisely this issue and proposes modifications that will contribute to the decarbonisation of urban mobility. As transparent and comprehensible communication is essential for the political and social acceptance of such far-reaching changes, well-founded modelling and visualisation are indispensable. This bachelor thesis explores the innovative approach of using procedural modelling for this purpose. The program ArcGIS CityEngine was used to implement this modelling. The procedural modelling in CityEngine is achieved using Computer Generated Architecture, short CGA. David Wasserman developed a set of rules called “Complete Street Rule” which are able to generate street scenes when incorporating in CityEngine. However, these rules are only able to generate an American street scene and cannot adequately represent Swiss situations. As this thesis bases on a case study in Zurich, Switzerland, it was necessary to adapt and supplement these rules in order to generate a realistic street scene.
@@ -14,6 +14,9 @@ In order to adapt the Complete Street Rule correctly to a Swiss Standard, variou
 
 # Instructions
 Instructions on how to integrate the rules into an existing project or how to create a new project from scratch can be found [here](Instructions.md). Instructions on how to create certain scenes within a project using the adapted rules can be found [here](Scene_Instructions.md). For general information concerning ArcGIS CityEngine please follow this [link](https://doc.arcgis.com/en/cityengine/latest/help/cityengine-help-intro.htm) leading to the ArcGIS CityEngine website. The road signs and traffic light objects are subject to a charge. For this reason they have been removed from the objects folders. The road signs can be purchased [here](https://www.unrealengine.com/marketplace/en-US/product/european-collection-swiss-traffic-signs-vol-1?sessionInvalidated=true) and the traffic lights [on this site](https://www.unrealengine.com/marketplace/en-US/product/smart-traffic-light).
+
+# References
+[^1] Wasserman, D. Complete Street Rule. (2015) GitHub repository, https://github.com/d-wasserman/Complete_Street_Rule.
 # Citation of the thesis
 Forestier, F. and E. Szalay (2024), Procedural modelling of urban mobility transitions: Case study of an E-Bike City in Zurich, Bachelor Thesis, IVT, ETH Zürich, Zurich
 
