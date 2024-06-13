@@ -1,0 +1,46 @@
+Material;Official?;Color or proxy
+adobe;yes;#c49784
+Brick;;brick
+brick;yes;#af5f46
+bricks;;brick
+canvas;;#ffffff
+cement;;concrete
+cement block;;concrete
+cement_block;yes;concrete
+CI sheet;;metal
+ciment_block;;concrete
+clay;;adobe
+concrete;yes;#c3c3c3
+Concrete;;concrete
+"concrete;brick";;brick
+"concrete;cement_block";;concrete
+copper;;#e68554
+fabric;;canvas
+glass;yes;#96b2d6
+limestone;yes;#d9d1bd
+loam;;rammed earth
+marble;;#ffffff
+masonry;yes;concrete
+metal;yes;#a4a4a4
+"metal;wood";;wood
+metal_plates;yes;metal
+mirror;yes;#ffffff
+mud;yes;rammed earth
+"mud;wood";;wood
+plaster;yes;concrete
+plastered;;concrete
+plastic;yes;#ffffff
+rammed earth;yes;#bea573
+reed;;#e1c770
+sand_cement_blocks;yes;concrete
+sandstone;yes;#edd5b3
+silicate brick;;concrete
+slate;yes;#656565
+steel;yes;metal
+stone;yes;#b4ac97
+tiles;yes;#6181bf
+timber_framing;yes;#ffffff
+tin;;metal
+unburnt brick;;#d1a06c
+vinyl;yes;plastic
+wood;yes;#846445
