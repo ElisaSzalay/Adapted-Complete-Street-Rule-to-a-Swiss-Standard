@@ -1,15 +1,15 @@
 /*
- * File:    Complete Street.cga
- * Created: 10/30/2015 Oct 2015
- * Last Updated: 1/11/2023
- * Author:  David J. Wasserman- As Part of and Based on Work from Esri Redlands
+ * File:    Swiss_Adaptions.cga
+ * Created: 29/03/2024 March 2024
+ * Last Updated: 13/06/2024
+ * Author:  E. Szalay- As part of a Bachelor Thesis and based on the Complete Street Rule developed by D. Wasserman
  * License: Apache 2.0 License and ESRI Attribution License.
- * Source: https://github.com/d-wasserman/Complete_Street_Rule
+ * Source: https://github.com/ElisaSzalay/Adapted-Complete-Street-Rule-to-a-Swiss-Standard
 # ESRI Attribution License:
 #	ESRI Derivative work
 #	http://mappingcenter.esri.com/downloads/AttributionAndLicense_05_09_07.pdf
 #
-# Copyright 2020 David J. Wasserman
+# Complete Street Rule with Copyright 2020 David J. Wasserman
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -25,40 +25,7 @@
 # --------------------------------
  */
 
-# Differences to Street Construction Simple:
-# This ruleset can also generate stop markings and crosswalks (by using the 
-# objects attributes) and generates more detailed roundabouts
-# Differences to Street Construction Standard:
-# More informed by MUTCD/AASHTO/NACTO Street Guidelines, but used approximations. 
-# Can create Bus lanes, bike lanes (of different colors), parking lanes (with parklets), 
-# medians (with alternative planting configurations), boulevards(double medians), and even
-# highways with HOV lanes, bridge supports, and shoulders (in center type and bicycle buffer).
-#
-#Sources for Reports and Descriptions:
-#1.http://www.fhwa.dot.gov/publications/research/safety/09039/03.cfm
-#2.http://mutcd.fhwa.dot.gov/index.htm
-#3.http://www.qcode.us/codes/southpasadena/view.php?topic=36-3-36_310-36_310_080
-#4.http://nacto.org/usdg/
-#5.http://nacto.org/cities-for-cycling/design-guide/
-#6.https://bookstore.transportation.org/collection_detail.aspx?ID=110
-#7.http://transweb.sjsu.edu/project/1005.html
-#8.http://onlinepubs.trb.org/onlinepubs/nchrp/nchrp_rpt_504.pdf 
 
-#Useful Numbers: 
-#13 feet	==3.9624 Meters
-#12 feet	==3.6576 Meters	
-#11 feet	==3.3528 Meters
-#10 feet	==3.048  Meters
-#9 feet		==2.7432 Meters
-#8 feet		==2.1336 Meters
-#7 feet		==1.8288 Meters
-#6 feet		==1.524  Meters
-#4 feet		==1.2192 Meters
-#3 feet		==.9144  Meters
-#2 feet		==.6096  Meters
-#1 feet		==.3048  Meters
-#1/2 feet	==.1524  Meters
-#1 inch		==.0254  Meters
 version "2023.1"
 
 
@@ -119,10 +86,21 @@ attr Fussgaengeruebergang = "false"
 attr Stop_Begin 				= "none"#_getInitialStop(connectionStart,nLanesLeft+_Lt_Transit_Lane_Count)
 @Order(2) @Enum("none","Wartelinien","gerade","gerade-rechts","gerade-links","links","rechts","line only","with stop marking","arrows on all lanes","arrows on side lanes","arrows for right turn","arrows for left turn","right;right;none;none","right;stop;stop;left","right;all;through-left;left","right;through-right;none","right;both;left",restricted=false) @Description("The initial stop markings do not take into account the topology of the intersection i.e. they need to be set manually")
 attr Stop_End 					="none"# _getInitialStop(connectionEnd, _Distribute_Right_Lanes+_Rt_Transit_Lane_Count)
-@Order(3) @Enum("white", "yellow")
-attr Pfeil_Farbe = "white"
-@Order(4) @Enum("none","gerade","gerade-rechts","gerade-links","links","rechts",restricted=false) @Description("Controls directional arrows in case of traffic lights and stop line")
+@Order(3) @Enum("none", "Wartelinien")
+attr Stop_Begin_Velo = "none"
+@Order(4) @Enum("none", "Wartelinien")
+attr Stop_End_Velo = "none"
+@Order(5) @Enum("white","yellow")
+attr Pfeil_Farbe="white"
+@Order(6) @Enum("none","gerade","gerade-rechts","gerade-links","links","rechts",restricted=false) @Description("Controls directional arrows in case of traffic lights and stop line")
 attr Richtungspfeil				="none"# _getInitialStop(connectionEnd, _Distribute_Right_Lanes+_Rt_Transit_Lane_Count)
+@Order(7) @Enum("none","gerade","gerade-rechts","gerade-links","links","rechts",restricted=false) @Description("Controls directional arrows in case of traffic lights and stop line")
+attr Richtungspfeil_End		="none"# _getInitialStop(connectionEnd, _Distribute_Right_Lanes+_Rt_Transit_Lane_Count)
+@Order(8) @Enum("false","true")
+attr Wartelinien_Begin_Crosswalk="false"
+@Order(9) @Enum("false","true")
+attr Wartelinien_End_Crosswalk="false"
+
 
 @Group("ROAD LAYOUT","Crosswalk Markings",3)
 @Order(1) @Enum("none","continental","ladder","transverse","dashed","solid","custom","ladder custom","raised custom") @Description("NACTO-High-visibility ladder, zebra, and continental crosswalk markings are preferable to standard parallel or dashed pavement markings. These are more visible to approaching vehicles and have been shown to improve yielding behavior.")										# TODO "solid","dashed","ladder"
@@ -281,7 +259,7 @@ attr Bike_Paint_Line_Sides  	="Both"
 attr Level_of_Blockage			="Rare"
 @Order(15)@Enum("Gestrichelt","None")@Description("Regelt die Mittellinie zwischen zwei angrenzenden Fahrradspuren")
 attr Mittellinie = "None"
-@Order(16)@Enum("gerade","gerade_links","gerade_rechts","links","rechts")@Description("Handles the bike symbol with arrows")
+@Order(16)@Enum("simpel","gerade","gerade_links","gerade_rechts","links","rechts")@Description("Handles the bike symbol with arrows")
 attr velosymbol= "gerade"
 
 @Group("MULTIMODAL LANES LAYOUT","Bike Box",6)
@@ -304,7 +282,7 @@ attr Sidewalk_Texture_Scale 		= 1
 @Order(4) @Range(min=0,max=360)@Description("Adjust the angle of the sidewalk texture. This attribute also controls the curb buffer and median walkway textures.")
 attr Sidewalk_Texture_Rotation		= 0
 @Order(5) @Distance @Range(min=0,max=0.4)@Description("Determines the height of the sidewalk. Default is 4 inches tall.  This attribute also controls the curb buffer and median walkway textures.")
-attr Sidewalk_Height 				= 0.25 			# height of sidewalk of curbs(4 inch is standard thickness) curb depth is 1.5 times sidewalk height
+attr Sidewalk_Height 				= 0.15		# height of sidewalk of curbs(4 inch is standard thickness) curb depth is 1.5 times sidewalk height
 @Group("SIDEWALK LAYOUT", "Sidewalk Plantings + Zones",8)
 @Description("Chooses the grass texture for the planting locations on the Sidewalk or Center Island. Bus Stops and trees will not generate if this is set to None.")@Enum("None","Random", "Standard Grass", "Gravel","Grate","Lawn 1", "Lawn 2", "Park", "Bermuda 1", "Bermuda 2", "Bermuda Dark", "Bluegrass 1", "Bluegrass 2", "Grass Short", "Grass Thick", "St Augustine 1", "St Augustine 2", "Light Rye","Soil Small Stones","Paver Red Octagon Tile") @Order(2)
 attr Sidewalk_Ground_Cover			= "None"
@@ -537,38 +515,47 @@ attr SBench_Toggle = true
 @Order(9)@Description("This parameter represents a handle that controls bike rack translation.")
 attr SBike_Rack_Translate_X = 0
 @Handle(shape=Bike_Rack_Insert,axis=y,type=move,color="#DD9922")#@Hidden
-@Order(10)@Description("This parameter represents a handle that controls rike rack translation.")
+@Order(10)@Description("This parameter represents a handle that controls bike rack translation.")
+attr SBike_Rack_Translate_Y = 0
+@Handle(shape=Bike_Rack_Insert,axis=y,type=move,color="#DD9922")#@Hidden
+@Order(11)@Description("This parameter represents a handle that controls rike rack translation.")
 attr SBike_Rack_Translate_Z = Center_Width/2+Bench_Adjuster
 @Handle(shape=Bike_Rack_Insert,type=toggle,color="#DD9922")@Enum(true,false) #@Hidden
-@Order(11)@Description("This parameter represents a handle that controls bike rack toggling.")
+@Order(12)@Description("This parameter represents a handle that controls bike rack toggling.")
 attr SBike_Rack_Toggle = true
 @Handle(shape=Traffic_Light^1,axis=z,type=angular,color="#FF1111") #@Hidden
-@Order(12)@Angle @Range(min=0,max=360)@Description("Determines the rotation of the signs pole.")
+@Order(13)@Angle @Range(min=0,max=360)@Description("Determines the rotation of the signs pole.")
 attr Street_Sign_Rotation = 180
 @Handle(shape=Traffic_Light^1,axis=x,type=move,color="#FF1111")#@Hidden
-@Order(13)@Description("This parameter represents a handle that controls street sign translation.")
-attr Street_Sign_Translate_X = 0
-@Handle(shape=Traffic_Light^1,axis=y,type=move,color="#FF1111")#@Hidden
 @Order(14)@Description("This parameter represents a handle that controls street sign translation.")
+attr Street_Sign_Translate_X = 0
+@Handle(shape=Traffic_Light^1,axis=z,type=move,color="#FF1111")#@Hidden
+@Order(15)@Description("This parameter represents a handle that controls street sign translation.")
 attr Street_Sign_Translate_Z = 0
 @Handle(shape=Traffic_Light^1,axis=z,type=angular,color="#FF1111") #@Hidden
-@Order(15)@Angle @Range(min=0,max=360)@Description("Determines the rotation of the haltestellen einstieg sign on the right hand side.")
+@Order(16)@Angle @Range(min=0,max=360)@Description("Determines the rotation of the haltestellen einstieg sign on the right hand side.")
 attr Haltestelle_Rotation_rechts = 150
 @Handle(shape=Traffic_Light^1,axis=x,type=move,color="#FF1111")#@Hidden
-@Order(16)@Description("This parameter represents a handle that controls haltestellen einstieg sign translation on the right hand side.")
-attr Haltestelle_Translate_X_rechts = -10
-@Handle(shape=Traffic_Light^1,axis=y,type=move,color="#FF1111")#@Hidden
 @Order(17)@Description("This parameter represents a handle that controls haltestellen einstieg sign translation on the right hand side.")
+attr Haltestelle_Translate_X_rechts = -10
+@Handle(shape=Traffic_Light^1,axis=z,type=move,color="#FF1111")#@Hidden
+@Order(18)@Description("This parameter represents a handle that controls haltestellen einstieg sign translation on the right hand side.")
 attr Haltestelle_Translate_Z_rechts = -0.5
 @Handle(shape=Traffic_Light^1,axis=z,type=angular,color="#FF1111") #@Hidden
-@Order(15)@Angle @Range(min=0,max=360)@Description("Determines the rotation of the haltestellen einstieg sign on the left hand side.")
+@Order(19)@Angle @Range(min=0,max=360)@Description("Determines the rotation of the haltestellen einstieg sign on the left hand side.")
 attr Haltestelle_Rotation_links = 150
 @Handle(shape=Traffic_Light^1,axis=x,type=move,color="#FF1111")#@Hidden
-@Order(16)@Description("This parameter represents a handle that controls haltestellen einstieg sign translation on the left hand side.")
+@Order(20)@Description("This parameter represents a handle that controls haltestellen einstieg sign translation on the left hand side.")
 attr Haltestelle_Translate_X_links = 10
-@Handle(shape=Traffic_Light^1,axis=y,type=move,color="#FF1111")#@Hidden
-@Order(17)@Description("This parameter represents a handle that controls haltestellen einstieg sign translation on the left hand side.")
+@Handle(shape=Traffic_Light^1,axis=z,type=move,color="#FF1111")#@Hidden
+@Order(21)@Description("This parameter represents a handle that controls haltestellen einstieg sign translation on the left hand side.")
 attr Haltestelle_Translate_Z_links = 0.75
+@Handle(shape=Traffic_Light^1,axis=y,type=move,color="#FF1111")#@Hidden
+@Order(22)@Description("This parameter represents a handle that controls haltestellen einstieg sign translation on the left hand side.")
+attr Haltestelle_Translate_Y_links = 0
+@Handle(shape=Traffic_Light^1,axis=y,type=move,color="#FF1111")#@Hidden
+@Order(23)@Description("This parameter represents a handle that controls haltestellen einstieg sign translation on the right hand side.")
+attr Haltestelle_Translate_Y_rechts = 0
 ############################
 # Reference Asset Constants
 ###########################
@@ -1121,15 +1108,15 @@ _stopListStencil(stopType,lanenumber)		=
 		_arrowStencilChoice(listItem(stopType,lanenumber))
 		
 _arrowStencilChoice(stopCode)=
-	case Richtungspfeil=="gerade":
+	case (Richtungspfeil=="gerade"|| Richtungspfeil_End=="gerade")&&stopCode=="g":
 		"MIVpfeil_gerade.obj"
-	case Richtungspfeil=="gerade-links":
+	case (Richtungspfeil=="gerade-links"|| Richtungspfeil_End=="gerade-links")&&stopCode=="lg":
 		"mivpfeil_links.obj"
-	case Richtungspfeil=="gerade-rechts":
+	case (Richtungspfeil=="gerade-rechts" ||Richtungspfeil_End=="gerade-rechts")&&stopCode=="rg":
 		"mivpfeil_rechts.obj"
-	case Richtungspfeil=="links":
+	case (Richtungspfeil=="links"||Richtungspfeil_End=="links")&&stopCode=="l":
 		"miv_pfeil_nurlinks.obj"
-	case Richtungspfeil=="rechts":
+	case (Richtungspfeil=="rechts"||Richtungspfeil_End=="rechts")&&stopCode=="r":
 		"miv_pfeil_nurrechts.obj"
 	case stopCode =="stop":
 		case rightHandTraffic: "Stop_Symbol.obj" else:"Stop_Symbol_Mirrored.obj"	  
@@ -1705,12 +1692,62 @@ Short_Long_Street-->
  		Short_Street	
 
 Long_Street-->
-	ReportMultimodalMetrics(reportingOn)
-	BridgeMain
-	split(u,uvSpace,1){_crosswalkBeginWidth/10: Asphalt("Auto","asphalt")
-					  | _crosswalkBeginWidth  : Crosswalk( Crosswalk_Begin ,1)
- 					  | ~1			  		  : StreetWithCrosswalkEnd }
-
+	case Wartelinien_Begin_Crosswalk=="true" && Wartelinien_End_Crosswalk=="true" :
+		ReportMultimodalMetrics(reportingOn)
+		BridgeMain
+		split(u,uvSpace,1){
+							0.6:split(v,unitSpace,0){(-geometry.vMin(0) * laneWidth): Asphalt("Conflict Zones","asphalt")# NEW
+													|laneWidth:Asphalt("Auto", "asphalt")
+													|laneWidth:Asphalt("Auto", "asphalt")  ApproachSymbolStencilsSetup(0,0,1,"wartelinien.obj")
+													|((geometry.vMax(0) - floor(geometry.vMax(0))) * laneWidth): Asphalt("Conflict Zones","asphalt")# NEW
+													}
+						|2: Asphalt("Conflict Zones", "crosswalk")
+						  | _crosswalkBeginWidth  : Crosswalk( Crosswalk_Begin ,1)
+	 					  | ~1			  		  : StreetWithCrosswalkEnd 
+	 					  #| _crosswalkEndWidth  : Crosswalk( Crosswalk_End ,1)
+	 					  #|1: Asphalt("Conflict Zones", "crosswalk")
+	 					  |0.6:split(v,unitSpace,0){((geometry.vMax(0) - floor(geometry.vMax(0))) * laneWidth): Asphalt("Conflict Zones","asphalt")# NEW
+	 					  							|laneWidth-((geometry.vMax(0) - floor(geometry.vMax(0))) * laneWidth):Asphalt("Conflict Zones", "crosswalk")  ApproachSymbolStencilsSetup(2,0,1,"wartelinien.obj")
+													|~laneWidth-(-geometry.vMin(0) * laneWidth):Asphalt("Conflict Zones", "crosswalk") 
+													|(-geometry.vMin(0) * laneWidth): Asphalt("Conflict Zones","asphalt")}# NEW}
+	 					 |1: Asphalt("Conflict Zones", "crosswalk")
+	 					  }
+		
+	case Wartelinien_Begin_Crosswalk=="true":
+		ReportMultimodalMetrics(reportingOn)
+		BridgeMain
+		
+		split(u,uvSpace,1){Begin_Crosswalk_To_Stop_Bar:CrossWalkGap
+							|0.6:split(v,unitSpace,0){(-geometry.vMin(0) * laneWidth): Asphalt("Conflict Zones","asphalt")# NEW
+													|laneWidth:Asphalt("Auto", "asphalt")
+													|laneWidth:Asphalt("Auto", "asphalt")  ApproachSymbolStencilsSetup(0,0,1,"wartelinien.obj")
+													|((geometry.vMax(0) - floor(geometry.vMax(0))) * laneWidth): Asphalt("Conflict Zones","asphalt")# NEW
+													}
+							|max(2,Begin_Crosswalk_To_Stop_Bar): Asphalt("Conflict Zones", "crosswalk")
+						  | _crosswalkBeginWidth  : Crosswalk( Crosswalk_Begin ,1)
+	 					  | ~1			  		  : StreetWithCrosswalkEnd }
+	case Wartelinien_End_Crosswalk=="true":
+		ReportMultimodalMetrics(reportingOn)
+		BridgeMain
+		split(u,uvSpace,1){1: Asphalt("Conflict Zones", "crosswalk")
+						  | _crosswalkBeginWidth  : Crosswalk( Crosswalk_Begin ,1)
+	 					  | ~1			  		  : StreetWithCrosswalkEnd 
+	 					  #| _crosswalkEndWidth  : Crosswalk( Crosswalk_End ,1)
+	 					  #|1: Asphalt("Conflict Zones", "crosswalk")
+	 					  |0.6:split(v,unitSpace,0){((geometry.vMax(0) - floor(geometry.vMax(0))) * laneWidth): Asphalt("Conflict Zones","asphalt")# NEW
+	 					  							|laneWidth-((geometry.vMax(0) - floor(geometry.vMax(0))) * laneWidth):Asphalt("Conflict Zones", "crosswalk")  ApproachSymbolStencilsSetup(2,0,1,"wartelinien.obj")
+													|~laneWidth-(-geometry.vMin(0) * laneWidth):Asphalt("Conflict Zones", "crosswalk") 
+													|(-geometry.vMin(0) * laneWidth): Asphalt("Conflict Zones","asphalt")}# NEW}
+	 					 |1: Asphalt("Conflict Zones", "crosswalk")
+	 					  }
+	
+	else:
+		ReportMultimodalMetrics(reportingOn)
+		BridgeMain
+		split(u,uvSpace,1){_crosswalkBeginWidth/10: Asphalt("Auto","asphalt")
+						  | _crosswalkBeginWidth  : Crosswalk( Crosswalk_Begin ,1)
+	 					  | ~1			  		  : StreetWithCrosswalkEnd }
+			
 Short_Street-->
  	ReportMultimodalMetrics(reportingOn)
  	BridgeMain
@@ -1737,19 +1774,27 @@ ReportMultimodalMetrics(report_bool)-->
 # split away the crosswalks at the end (if any) using the special UVSET 2
 StreetWithCrosswalkEnd -->	
 	#print("DirLane "+str(DirLaneTotal))
-	split(u,uvSpace,2){ _crosswalkEndWidth/10: Asphalt("Auto","asphalt")
-					  | _crosswalkEndWidth    : Crosswalk( Crosswalk_End ,2)
- 					  | ~1			  		  : CrossWalkGap}
- 					  
+	case (Wartelinien_Begin_Crosswalk=="true" && Wartelinien_End_Crosswalk=="true")||Wartelinien_End_Crosswalk=="true":
+		split(u,uvSpace,2){
+							 max(2,End_Crosswalk_To_Stop_Bar): Asphalt("Auto","asphalt") #ApproachSymbolStencilsSetup(2,0,1,"wartelinien.obj")
+						  | _crosswalkEndWidth    : Crosswalk( Crosswalk_End ,2)
+	 					  | ~1			  		  : CrossWalkGap
+	 					  }
+ 	else:
+ 		split(u,uvSpace,2){
+							 _crosswalkEndWidth: Asphalt("Auto","asphalt") #ApproachSymbolStencilsSetup(2,0,1,"wartelinien.obj")
+						  | _crosswalkEndWidth    : Crosswalk( Crosswalk_End ,2)
+	 					  | ~1			  		  : CrossWalkGap
+	 					  }				  
 CrossWalkGap--> 
 #This solution while imperfect and vulnerable to distortion prevents UVspace/UnitSpace conflicts from cutting geometry. User can adjust relative gaps to compensate. 
 	case Bike_Lane_Type =="Two-way":
-		split(u,unitSpace,0) {( Begin_Crosswalk_To_Stop_Bar ):AsphaltPainted(Bike_Lane_Color,"Auto","asphalt")
+		split(u,unitSpace,0) {( Begin_Crosswalk_To_Stop_Bar ):Asphalt("Auto","asphalt")
 							 |~1:StreetWithEntries
-							 |( End_Crosswalk_To_Stop_Bar ):AsphaltPainted(Bike_Lane_Color,"Auto","asphalt")} 
+							 |( End_Crosswalk_To_Stop_Bar ):Asphalt("Auto","asphalt")} 
 	else:
 		split(u,unitSpace,0) {( Begin_Crosswalk_To_Stop_Bar ):Asphalt("Auto","asphalt")
-								 |~1:StreetWithEntries
+								| ~1:StreetWithEntries
 								 |( End_Crosswalk_To_Stop_Bar ):Asphalt("Auto","asphalt")} 
 		
 # split into the two street sides (if not oneway)
@@ -1795,19 +1840,25 @@ StreetWithEntries -->
 #and then moves the rest of the space left to the dedicated lane spaces. 
 StopBox(RuleChoice)--> 
 	
-		case Bike_Lane_Type=="Two-way" && (Right_Bike_Lane_Width >0  || Left_Bike_Lane_Width >0 ):
+		case Bike_Lane_Type=="Two-way" && (Stop_Begin=="line only" || Stop_End=="line only") && (Right_Bike_Lane_Width >0  || Left_Bike_Lane_Width >0 ):
 			case RuleChoice=="RightSide":
 				
 				case Right_Bike_Box_Bool && geometry.dv(0,unitSpace)>BikeBoxGeometryThreshold :#Must be enough room, turned on. 
 					split(u,unitSpace,0) {~1:RightSide| Bike_Box_Length :BikeBoxCreation(0)}
 				else:
-					split(u,unitSpace,0) {~1:RightSide|_stopEnd*ThickPaintLineWidth:AsphaltPainted("yellow","Auto","stop_bar")|~0:LeftSide}
+					split(u,unitSpace,0) {~1:RightSide
+					|0: split(v,unitSpace,0){streetWidth/2: AsphaltPainted(Bike_Lane_Color,"Auto","stop_bar")
+																		|streetWidth/2:AsphaltPainted(Bike_Lane_Color,"Auto","stop_bar")}
+					|~0:LeftSide}
 				
 			case RuleChoice=="LeftSide":
 				case  Left_Bike_Box_Bool && geometry.dv(0,unitSpace)>BikeBoxGeometryThreshold: #Must be enough room, turned on. 
 					split(u,unitSpace,0) { Bike_Box_Length :BikeBoxCreation(2)|~1:LeftSide}
 				else:
-					split(u,unitSpace,0) {_stopBegin*ThickPaintLineWidth:AsphaltPainted("yellow","Auto","stop_bar")|~1:LeftSide}	
+					split(u,unitSpace,0) {0:split(v,unitSpace,0){streetWidth/2:AsphaltPainted(Bike_Lane_Color,"Auto","stop_bar") 
+																		|streetWidth/2:AsphaltPainted(Bike_Lane_Color,"Auto","stop_bar")}
+					
+					|~1:LeftSide}	
 				#print("Drin")
 			else:
 				case RuleChoice=="RightSide":
@@ -1821,13 +1872,14 @@ StopBox(RuleChoice)-->
 					split(u,unitSpace,0) {~1:RightSide| Bike_Box_Length :BikeBoxCreation(0)}
 				case Stop_Begin!="none" && Stop_Begin!="line only": #|| Stop_Begin=="gerade-rechts" || Stop_Begin=="gerade-links" || Stop_Begin=="links" || Stop_Begin=="rechts" || Stop_End=="gerade" || Stop_End=="gerade-rechts" || Stop_End=="gerade-links" || Stop_End=="links" || Stop_End=="rechts":
 					split(u,unitSpace,0) {~1:RightSide}
-					case Stop_End!="none" && Stop_End!="line only": #|| Stop_Begin=="gerade-rechts" || Stop_Begin=="gerade-links" || Stop_Begin=="links" || Stop_Begin=="rechts" || Stop_End=="gerade" || Stop_End=="gerade-rechts" || Stop_End=="gerade-links" || Stop_End=="links" || Stop_End=="rechts":
+				case Stop_End!="none" && Stop_End!="line only": #|| Stop_Begin=="gerade-rechts" || Stop_Begin=="gerade-links" || Stop_Begin=="links" || Stop_Begin=="rechts" || Stop_End=="gerade" || Stop_End=="gerade-rechts" || Stop_End=="gerade-links" || Stop_End=="links" || Stop_End=="rechts":
 					split(u,unitSpace,0) {~1:RightSide}
 					
 				case Transit_Lane=="Bus Lane":
 					split(u,unitSpace,0) {~1:RightSide|_stopEnd*ThickPaintLineWidth:AsphaltPainted("yellow","Auto","stop_bar")}
 				
 				else:
+					
 					split(u,unitSpace,0) {~1:RightSide|_stopEnd*ThickPaintLineWidth:AsphaltPainted("white","Auto","stop_bar")}
 			
 			case RuleChoice=="LeftSide":
@@ -1901,47 +1953,100 @@ HighLODApproachMarkings(dir,lanenumber,lanestotal,markings)-->
 								_LastLaneSwitch(lanenumber,lanestotal)*PaintLineWidth:AsphaltPainted("white","Auto","drive_lane")}
 		
 ApproachSymbolStencilsSetup(dir,lanenumber,lanestotal,markings)-->
-	case Stop_End== "Wartelinien":
+	case (Wartelinien_Begin_Crosswalk=="true"||Wartelinien_End_Crosswalk=="true")&&markings=="wartelinien.obj":
+	
+				#split(v,unitSpace,0) {(ceil(geometry.vMin-0.01)-geometry.vMin): Asphalt("Conflict Zones","crosswalk")				  
+			  				# |~1:split(u,unitSpace,0){~1:NIL
+			  					 ApproachSymbolStencils(dir,lanenumber,lanestotal,markings)
+			  					# |~1:NIL}
+							  #| geometry.vMax-floor(geometry.vMax+0.01): Asphalt("Conflict Zones","crosswalk") }
+	case Stop_Begin== "Wartelinien"|| Stop_End=="Wartelinien":
 		split(v,unitSpace,0) {'0.1:NIL
 			  				 |~1:split(u,unitSpace,0){'0.9:NIL
 			  					 |0.6:ApproachSymbolStencils(dir,lanenumber,lanestotal,markings)
 			  					 |'0.15:NIL}
 							  |'0.1:NIL}
-	case Stop_Begin== "Wartelinien":
-		split(v,unitSpace,0) {'0.1:NIL
-			  				 |~1:split(u,unitSpace,0){'0.9:NIL
-			  					 |0.6:ApproachSymbolStencils(dir,lanenumber,lanestotal,markings)
-			  					 |'0.15:NIL}
-							  |'0.1:NIL}
-	case Richtungspfeil!="none":
-		case Richtungspfeil=="gerade":
-			split(v,unitSpace,0) {~0.1:NIL
-				  				 |0.8:split(u,unitSpace,0){~0.5:NIL
-				  					 |6.5:ApproachSymbolStencils(dir,lanenumber,lanestotal,markings)
-				  					 |~0.15:NIL}
-								  |~0.1:NIL}
-		else:
-			split(v,unitSpace,0) {~0.1:NIL
-				  				 |1.5:split(u,unitSpace,0){~0.5:NIL
-				  					 |6.5:ApproachSymbolStencils(dir,lanenumber,lanestotal,markings)
-				  					 |~0.15:NIL}
-								  |~0.1:NIL}
+	case dir==0:
+		#case Richtungspfeil!="none":
+		
+			case Richtungspfeil=="gerade":
+				split(v,unitSpace,0) {~0.1:NIL
+					  				 |0.8:split(u,unitSpace,0){~0.5:NIL
+					  					 |6.5:ApproachSymbolStencils(dir,lanenumber,lanestotal,markings)
+					  					 |~0.15:NIL}
+									  |~0.1:NIL}
+			case Richtungspfeil!="gerade"&& Richtungspfeil!="none":		
+				split(v,unitSpace,0) {~0.1:NIL
+					  				 |1.5:split(u,unitSpace,0){~0.5:NIL
+					  					 |6.5:ApproachSymbolStencils(dir,lanenumber,lanestotal,markings)
+					  					 |~0.15:NIL}
+									  |~0.1:NIL}	  
+			case Stop_Begin!="none":
+				split(v,unitSpace,0) {~0.1:NIL
+					  				 |laneWidth:split(u,unitSpace,0){~0.5:NIL
+					  					 |6.5:ApproachSymbolStencils(dir,lanenumber,lanestotal,markings)
+					  					 |~0.15:NIL}
+									  |~0.1:NIL}
+			else:
+				NIL
+	case dir==2:	
+		#case Richtungspfeil_End!="none":
+		
+			case Richtungspfeil_End=="gerade":
+				
+				split(v,unitSpace,0) {~0.1:NIL
+					  				 |0.8:split(u,unitSpace,0){~0.5:NIL
+					  					 |6.5:ApproachSymbolStencils(dir,lanenumber,lanestotal,markings)
+					  					 |~0.15:NIL}
+									  |~0.1:NIL}
+			case Richtungspfeil_End!="gerade"&& Richtungspfeil_End!="none":	
+				print(markings)
+				split(v,unitSpace,0) {~0.1:NIL
+					  				 |1.5:split(u,unitSpace,0){~0.5:NIL
+					  					 |6.5:ApproachSymbolStencils(dir,lanenumber,lanestotal,markings)
+					  					 |~0.15:NIL}
+									  |~0.1:NIL}
+			case Stop_End!="none":
+				split(v,unitSpace,0) {~0.1:NIL
+					  				 |laneWidth:split(u,unitSpace,0){~0.5:NIL
+					  					 |6.5:ApproachSymbolStencils(dir,lanenumber,lanestotal,markings)
+					  					 |~0.15:NIL}
+									  |~0.1:NIL}
+			else:
+				print("ja")
+				NIL
 	else:
 		split(v,unitSpace,0) {'0.1:NIL
 			  				 |~1:split(u,unitSpace,0){1:NIL
 			  					 |7:ApproachSymbolStencils(dir,lanenumber,lanestotal,markings)
 			  					 |'0.5:NIL}
-							  |'0.1:NIL}					  
+							  |'0.1:NIL}		
+							  				  
 ApproachSymbolStencils(dir,lanenumber,lanestotal,markings)-->
 	case find(str(markings),"Nothing",0)!=-1:
 		NIL
 	else:
-		normalizeUV(0, uv, collectiveAllFaces)
-		rotateUV(0,90)
-		insertAlongUV(0, StencilFolder+"/"+markings, 0)
-		extrude(0.01)
-		comp (f) {top:AsphaltPaintedStencil(Pfeil_Farbe ,"Bikeways","bike_lane")}
-
+		case Transit_Lane=="Bus Lane":
+			normalizeUV(0, uv, collectiveAllFaces)
+			rotateUV(0,90)
+			insertAlongUV(0, StencilFolder+"/"+markings, 0)
+			extrude(0.01)
+			comp (f) {top:AsphaltPaintedStencil("yellow" ,"Bikeways","bike_lane")}
+		case Wartelinien_Begin_Crosswalk=="true" && markings=="wartelinien.obj"&&dir==0:
+			
+			normalizeUV(0, uv, collectiveAllFaces)
+			rotateUV(0,270)
+			insertAlongUV(0, StencilFolder+"/"+markings, 0)
+			extrude(0.01)
+			comp (f) {top:AsphaltPaintedStencil(Pfeil_Farbe ,"Bikeways","bike_lane")}
+			
+		else:
+			normalizeUV(0, uv, collectiveAllFaces)
+			rotateUV(0,90)
+			insertAlongUV(0, StencilFolder+"/"+markings, 0)
+			extrude(0.01)
+			comp (f) {top:AsphaltPaintedStencil(Pfeil_Farbe ,"Bikeways","bike_lane")}
+			
 
 MainLaneMarkings(dir,lanenumber,markings)--> #Ground Textured Rule	
 	tileUV(0,~14,~ Lane_Width )				# the tileUV operation makes sure that one unit in u-space corresponds to approx 14 meters, the v-coord is not touched in the case of 0 as parameter
@@ -1996,17 +2101,30 @@ ConventionalLane(dir,lanestotal,lanenumber,stopType)-->
 			MixedTrafficOnLane (dir,lanenumber,lanestotal)
 			Sharrow(dir,lanestotal,lanenumber)
 	case (stopType=="none"||stopType=="line only") && (lanenumber==lanestotal-1):# Makes sure with no stop type last lane has no lane with contiguous stripes	
-		case Richtungspfeil != "none":
-			#print("klappt")
-			split(u,unitSpace,0){ ~1: Asphalt("Auto","drive_lane")
-	 							| 14: ApproachMarkings(dir,lanenumber,lanestotal,Richtungspfeil) }
-	 		MixedTrafficOnLane (dir,lanenumber,lanestotal)
-	 		Sharrow(dir,lanestotal,lanenumber)
-		else:
-			#print("klappt nicht")
-			Asphalt("Transit","bus_lane")
-			MixedTrafficOnLane (dir,lanenumber,lanestotal)
-			Sharrow(dir,lanestotal,lanenumber)			
+		case dir==2:
+			case Richtungspfeil_End != "none":
+				#print("klappt")
+				split(u,unitSpace,0){ ~1: Asphalt("Auto","drive_lane")
+		 							| 14: ApproachMarkings(dir,lanenumber,lanestotal,Richtungspfeil_End) }
+		 		MixedTrafficOnLane (dir,lanenumber,lanestotal)
+		 		Sharrow(dir,lanestotal,lanenumber)
+			else:
+				#print("klappt nicht")
+				Asphalt("Bikeways","bike_lane")
+				MixedTrafficOnLane (dir,lanenumber,lanestotal)
+				Sharrow(dir,lanestotal,lanenumber)
+		else:	
+			case Richtungspfeil != "none":
+				#print("klappt")
+				split(u,unitSpace,0){ ~1: Asphalt("Auto","drive_lane")
+		 							| 14: ApproachMarkings(dir,lanenumber,lanestotal,Richtungspfeil) }
+		 		MixedTrafficOnLane (dir,lanenumber,lanestotal)
+		 		Sharrow(dir,lanestotal,lanenumber)
+			else:
+				#print("klappt nicht")
+				Asphalt("Bikeways","bike_lane")
+				MixedTrafficOnLane (dir,lanenumber,lanestotal)
+				Sharrow(dir,lanestotal,lanenumber)			
 	case !(stopType=="none"||stopType=="line only") && (lanenumber==lanestotal-1):# Makes sure with no stop type last lane has no lane with contiguous stripes
 		split(u,unitSpace,0){ ~1: Asphalt("Auto","drive_lane")
  							| 6.5: ApproachMarkings(dir,lanenumber,lanestotal,stopType) }
@@ -2121,42 +2239,227 @@ Transit_Lane_Allocator(dir)--> #Allocates the texture rule based on what type of
 		Bus_Lane_Texture_Rule(dir)
 
 Tempo_30_Texture_Rule(dir)--> 
-	alignScopeToAxes(y)
 	
-	split(u,unitSpace,0){~1:split(v,unitSpace,0){#PaintLineWidth*_PaintLineControl("Right", Transit_Paint_Line_Sides ):AsphaltPainted("yellow","Transit","bus_lane")
-													#Level 1-First split indentatio	
-													~1:Asphalt("Transit","bus_lane") split(u,unitSpace,0){1:NIL
-														#Level 2- sub-split indentation
-														| Transit_Lane_Width: Tempo_30_Stencil_Setup(dir)
-														|~ Transit_Symbol_Spacing :NIL
-														|{ Transit_Lane_Width : Tempo_30_Stencil_Setup(dir)
-														|~ Transit_Symbol_Spacing :NIL}*
-														#| _tooShort(geometry.du(0,unitSpace),Transit_Symbol_Spacing)*_hasStopSideSwitch(dir)*Transit_Lane_Width: Bus_Lane_Stencil_Setup(dir)
-														|1:NIL}}
-							
-							 |6.5: ApproachMarkings(dir,0,1,Richtungspfeil)
-							 |0.5:Asphalt("Transit","bus_lane") }
-													#|.1:MainLaneMarkingLODChoice(0,split.index,"_stripes_white")}#|PaintLineWidth*_PaintLineControl("Left", Transit_Paint_Line_Sides ):AsphaltPainted("yellow","Transit","bus_lane")}
-	#BusOnLane(dir)
-
+	case Transit_Lane=="Zone 30":
+		case Richtungspfeil !="none"&&dir==0:
+			alignScopeToAxes(y)
+			split(u,unitSpace,0){~1:split(v,unitSpace,0){#PaintLineWidth*_PaintLineControl("Right", Transit_Paint_Line_Sides ):AsphaltPainted("yellow","Transit","bus_lane")
+															#Level 1-First split indentatio	
+															~1:Asphalt("Transit","bus_lane") split(u,unitSpace,0){1:NIL
+																#Level 2- sub-split indentation
+																| Transit_Lane_Width: Zone_30_Stencil_Setup(dir)
+																|~ Transit_Symbol_Spacing :NIL
+																|{ Transit_Lane_Width : Tempo_30_Stencil_Setup(dir)
+																|~ Transit_Symbol_Spacing :NIL}*
+																#| _tooShort(geometry.du(0,unitSpace),Transit_Symbol_Spacing)*_hasStopSideSwitch(dir)*Transit_Lane_Width: Bus_Lane_Stencil_Setup(dir)
+																|1:NIL}}
+									
+									 |6.5: ApproachMarkings(dir,0,1,Richtungspfeil)
+									 #|6.5: ApproachMarkings(dir,0,1,Stop_Begin)
+									 |0.5:Asphalt("Transit","bus_lane") }
+															#|.1:MainLaneMarkingLODChoice(0,split.index,"_stripes_white")}#|PaintLineWidth*_PaintLineControl("Left", Transit_Paint_Line_Sides ):AsphaltPainted("yellow","Transit","bus_lane")}
+			#BusOnLane(dir)
+		case Richtungspfeil_End !="none"&&dir==2:
+			alignScopeToAxes(y)
+			split(u,unitSpace,0){~1:split(v,unitSpace,0){#PaintLineWidth*_PaintLineControl("Right", Transit_Paint_Line_Sides ):AsphaltPainted("yellow","Transit","bus_lane")
+															#Level 1-First split indentatio	
+															~1:Asphalt("Transit","bus_lane") split(u,unitSpace,0){1:NIL
+																#Level 2- sub-split indentation
+																| Transit_Lane_Width: Zone_30_Stencil_Setup(dir)
+																|~ Transit_Symbol_Spacing :NIL
+																|{ Transit_Lane_Width : Tempo_30_Stencil_Setup(dir)
+																|~ Transit_Symbol_Spacing :NIL}*
+																#| _tooShort(geometry.du(0,unitSpace),Transit_Symbol_Spacing)*_hasStopSideSwitch(dir)*Transit_Lane_Width: Bus_Lane_Stencil_Setup(dir)
+																|1:NIL}}
+									
+									 |6.5: ApproachMarkings(dir,0,1,Richtungspfeil_End)
+									 #|6.5: ApproachMarkings(dir,0,1,Stop_Begin)
+									 |0.5:Asphalt("Transit","bus_lane") }
+															#|.1:MainLaneMarkingLODChoice(0,split.index,"_stripes_white")}#|PaintLineWidth*_PaintLineControl("Left", Transit_Paint_Line_Sides ):AsphaltPainted("yellow","Transit","bus_lane")}
+			#BusOnLane(dir)
+		
+		case dir==2:
+			alignScopeToAxes(y)
+			split(u,unitSpace,0){~1:split(v,unitSpace,0){#PaintLineWidth*_PaintLineControl("Right", Transit_Paint_Line_Sides ):AsphaltPainted("yellow","Transit","bus_lane")
+															#Level 1-First split indentatio	
+															~1:Asphalt("Transit","bus_lane") split(u,unitSpace,0){1:NIL
+																#Level 2- sub-split indentation
+																| Transit_Lane_Width: Zone_30_Stencil_Setup(dir)
+																|~ Transit_Symbol_Spacing :NIL
+																|{ Transit_Lane_Width : Tempo_30_Stencil_Setup(dir)
+																|~ Transit_Symbol_Spacing :NIL}*
+																#| _tooShort(geometry.du(0,unitSpace),Transit_Symbol_Spacing)*_hasStopSideSwitch(dir)*Transit_Lane_Width: Bus_Lane_Stencil_Setup(dir)
+																|1:NIL}}
+									
+									 #|6.5: ApproachMarkings(dir,0,1,Richtungspfeil)
+									 |6.5: ApproachMarkings(dir,0,1,Stop_End)
+									 }#|0.5:Asphalt("Transit","bus_lane") }
+															#|.1:MainLaneMarkingLODChoice(0,split.index,"_stripes_white")}#|PaintLineWidth*_PaintLineControl("Left", Transit_Paint_Line_Sides ):AsphaltPainted("yellow","Transit","bus_lane")}
+		else:
+			alignScopeToAxes(y)
+			split(u,unitSpace,0){~1:split(v,unitSpace,0){#PaintLineWidth*_PaintLineControl("Right", Transit_Paint_Line_Sides ):AsphaltPainted("yellow","Transit","bus_lane")
+															#Level 1-First split indentatio	
+															~1:Asphalt("Transit","bus_lane") split(u,unitSpace,0){1:NIL
+																#Level 2- sub-split indentation
+																| Transit_Lane_Width: Zone_30_Stencil_Setup(dir)
+																|~ Transit_Symbol_Spacing :NIL
+																|{ Transit_Lane_Width : Tempo_30_Stencil_Setup(dir)
+																|~ Transit_Symbol_Spacing :NIL}*
+																#| _tooShort(geometry.du(0,unitSpace),Transit_Symbol_Spacing)*_hasStopSideSwitch(dir)*Transit_Lane_Width: Bus_Lane_Stencil_Setup(dir)
+																|1:NIL}}
+									
+									 #|6.5: ApproachMarkings(dir,0,1,Richtungspfeil)
+									 |6.5: ApproachMarkings(dir,0,1,Stop_Begin)
+									} #|0.5:Asphalt("Transit","bus_lane") }
+															#|.1:MainLaneMarkingLODChoice(0,split.index,"_stripes_white")}#|PaintLineWidth*_PaintLineControl("Left", Transit_Paint_Line_Sides ):AsphaltPainted("yellow","Transit","bus_lane")}
+	
+	else:
+		case Richtungspfeil !="none"&&dir==0:
+			alignScopeToAxes(y)
+			split(u,unitSpace,0){~1:split(v,unitSpace,0){#PaintLineWidth*_PaintLineControl("Right", Transit_Paint_Line_Sides ):AsphaltPainted("yellow","Transit","bus_lane")
+															#Level 1-First split indentatio	
+															~1:Asphalt("Transit","bus_lane") split(u,unitSpace,0){1:NIL
+																#Level 2- sub-split indentation
+																| Transit_Lane_Width: Tempo_30_Stencil_Setup(dir)
+																|~ Transit_Symbol_Spacing :NIL
+																|{ Transit_Lane_Width : Tempo_30_Stencil_Setup(dir)
+																|~ Transit_Symbol_Spacing :NIL}*
+																#| _tooShort(geometry.du(0,unitSpace),Transit_Symbol_Spacing)*_hasStopSideSwitch(dir)*Transit_Lane_Width: Bus_Lane_Stencil_Setup(dir)
+																|1:NIL}}
+									
+									 |6.5: ApproachMarkings(dir,0,1,Richtungspfeil)
+									 #|6.5: ApproachMarkings(dir,0,1,Stop_Begin)
+									 |0.5:Asphalt("Transit","bus_lane") }
+															#|.1:MainLaneMarkingLODChoice(0,split.index,"_stripes_white")}#|PaintLineWidth*_PaintLineControl("Left", Transit_Paint_Line_Sides ):AsphaltPainted("yellow","Transit","bus_lane")}
+			#BusOnLane(dir)
+		case Richtungspfeil_End !="none"&&dir==2:
+			alignScopeToAxes(y)
+			split(u,unitSpace,0){~1:split(v,unitSpace,0){#PaintLineWidth*_PaintLineControl("Right", Transit_Paint_Line_Sides ):AsphaltPainted("yellow","Transit","bus_lane")
+															#Level 1-First split indentatio	
+															~1:Asphalt("Transit","bus_lane") split(u,unitSpace,0){1:NIL
+																#Level 2- sub-split indentation
+																| Transit_Lane_Width: Tempo_30_Stencil_Setup(dir)
+																|~ Transit_Symbol_Spacing :NIL
+																|{ Transit_Lane_Width : Tempo_30_Stencil_Setup(dir)
+																|~ Transit_Symbol_Spacing :NIL}*
+																#| _tooShort(geometry.du(0,unitSpace),Transit_Symbol_Spacing)*_hasStopSideSwitch(dir)*Transit_Lane_Width: Bus_Lane_Stencil_Setup(dir)
+																|1:NIL}}
+									
+									 |6.5: ApproachMarkings(dir,0,1,Richtungspfeil_End)
+									 #|6.5: ApproachMarkings(dir,0,1,Stop_Begin)
+									 |0.5:Asphalt("Transit","bus_lane") }
+															#|.1:MainLaneMarkingLODChoice(0,split.index,"_stripes_white")}#|PaintLineWidth*_PaintLineControl("Left", Transit_Paint_Line_Sides ):AsphaltPainted("yellow","Transit","bus_lane")}
+			#BusOnLane(dir)
+		case dir==2:
+			alignScopeToAxes(y)
+			split(u,unitSpace,0){~1:split(v,unitSpace,0){#PaintLineWidth*_PaintLineControl("Right", Transit_Paint_Line_Sides ):AsphaltPainted("yellow","Transit","bus_lane")
+															#Level 1-First split indentatio	
+															~1:Asphalt("Transit","bus_lane") split(u,unitSpace,0){1:NIL
+																#Level 2- sub-split indentation
+																| Transit_Lane_Width: Tempo_30_Stencil_Setup(dir)
+																|~ Transit_Symbol_Spacing :NIL
+																|{ Transit_Lane_Width : Tempo_30_Stencil_Setup(dir)
+																|~ Transit_Symbol_Spacing :NIL}*
+																#| _tooShort(geometry.du(0,unitSpace),Transit_Symbol_Spacing)*_hasStopSideSwitch(dir)*Transit_Lane_Width: Bus_Lane_Stencil_Setup(dir)
+																|1:NIL}}
+									
+									 #|6.5: ApproachMarkings(dir,0,1,Richtungspfeil)
+									 |6.5: ApproachMarkings(dir,0,1,Stop_End)
+									 }#|0.5:Asphalt("Transit","bus_lane") }
+															#|.1:MainLaneMarkingLODChoice(0,split.index,"_stripes_white")}#|PaintLineWidth*_PaintLineControl("Left", Transit_Paint_Line_Sides ):AsphaltPainted("yellow","Transit","bus_lane")}
+		else:
+			alignScopeToAxes(y)
+			split(u,unitSpace,0){~1:split(v,unitSpace,0){#PaintLineWidth*_PaintLineControl("Right", Transit_Paint_Line_Sides ):AsphaltPainted("yellow","Transit","bus_lane")
+															#Level 1-First split indentatio	
+															~1:Asphalt("Transit","bus_lane") split(u,unitSpace,0){1:NIL
+																#Level 2- sub-split indentation
+																| Transit_Lane_Width: Tempo_30_Stencil_Setup(dir)
+																|~ Transit_Symbol_Spacing :NIL
+																|{ Transit_Lane_Width : Tempo_30_Stencil_Setup(dir)
+																|~ Transit_Symbol_Spacing :NIL}*
+																#| _tooShort(geometry.du(0,unitSpace),Transit_Symbol_Spacing)*_hasStopSideSwitch(dir)*Transit_Lane_Width: Bus_Lane_Stencil_Setup(dir)
+																|1:NIL}}
+									
+									 #|6.5: ApproachMarkings(dir,0,1,Richtungspfeil)
+									 |6.5: ApproachMarkings(dir,0,1,Stop_Begin)
+									} #|0.5:Asphalt("Transit","bus_lane") }
+															#|.1:MainLaneMarkingLODChoice(0,split.index,"_stripes_white")}#|PaintLineWidth*_PaintLineControl("Left", Transit_Paint_Line_Sides ):AsphaltPainted("yellow","Transit","bus_lane")}
+	
+		
 
 Bus_Lane_Texture_Rule(dir)--> 
-	alignScopeToAxes(y)
-	split(u,unitSpace,0){~1:split(v,unitSpace,0){#PaintLineWidth*_PaintLineControl("Right", Transit_Paint_Line_Sides ):AsphaltPainted("yellow","Transit","bus_lane")
-							#Level 1-First split indentation
-									~1:Asphalt("Transit","bus_lane") split(u,unitSpace,0){1:NIL
-										#Level 2- sub-split indentation
-										| Transit_Lane_Width: Bus_Lane_Stencil_Setup(dir)
-										|~ Transit_Symbol_Spacing :NIL
-										|{ Transit_Lane_Width : Bus_Lane_Stencil_Setup(dir)
-										|~ Transit_Symbol_Spacing :NIL}*
-										#| _tooShort(geometry.du(0,unitSpace),Transit_Symbol_Spacing)*_hasStopSideSwitch(dir)*Transit_Lane_Width: Bus_Lane_Stencil_Setup(dir)
-										|1:NIL}}
-							|6.5: ApproachMarkings(dir,0,1,Richtungspfeil)
-							|0.5:Asphalt("Transit","bus_lane") }
-							
-							#|.2:MainLaneMarkingLODChoice(0,split.index,"_stripes_white")}#|PaintLineWidth*_PaintLineControl("Left", Transit_Paint_Line_Sides ):AsphaltPainted("yellow","Transit","bus_lane")}
-	BusOnLane(dir)
+	case Richtungspfeil !="none"&&dir==0:
+			alignScopeToAxes(y)
+			split(u,unitSpace,0){~1:split(v,unitSpace,0){#PaintLineWidth*_PaintLineControl("Right", Transit_Paint_Line_Sides ):AsphaltPainted("yellow","Transit","bus_lane")
+															#Level 1-First split indentatio	
+															~1:Asphalt("Transit","bus_lane") split(u,unitSpace,0){1:NIL
+																#Level 2- sub-split indentation
+																| Transit_Lane_Width: Bus_Lane_Stencil_Setup(dir)
+																|~ Transit_Symbol_Spacing :NIL
+																|{ Transit_Lane_Width : Bus_Lane_Stencil_Setup(dir)
+																|~ Transit_Symbol_Spacing :NIL}*
+																#| _tooShort(geometry.du(0,unitSpace),Transit_Symbol_Spacing)*_hasStopSideSwitch(dir)*Transit_Lane_Width: Bus_Lane_Stencil_Setup(dir)
+																|1:NIL}}
+									
+									 |6.5: ApproachMarkings(dir,0,1,Richtungspfeil)
+									 #|6.5: ApproachMarkings(dir,0,1,Stop_Begin)
+									 |0.5:Asphalt("Transit","bus_lane") }
+															#|.1:MainLaneMarkingLODChoice(0,split.index,"_stripes_white")}#|PaintLineWidth*_PaintLineControl("Left", Transit_Paint_Line_Sides ):AsphaltPainted("yellow","Transit","bus_lane")}
+			BusOnLane(dir)
+		case Richtungspfeil_End !="none"&&dir==2:
+			alignScopeToAxes(y)
+			split(u,unitSpace,0){~1:split(v,unitSpace,0){#PaintLineWidth*_PaintLineControl("Right", Transit_Paint_Line_Sides ):AsphaltPainted("yellow","Transit","bus_lane")
+															#Level 1-First split indentatio	
+															~1:Asphalt("Transit","bus_lane") split(u,unitSpace,0){1:NIL
+																#Level 2- sub-split indentation
+																| Transit_Lane_Width: Bus_Lane_Stencil_Setup(dir)
+																|~ Transit_Symbol_Spacing :NIL
+																|{ Transit_Lane_Width : Bus_Lane_Stencil_Setup(dir)
+																|~ Transit_Symbol_Spacing :NIL}*
+																#| _tooShort(geometry.du(0,unitSpace),Transit_Symbol_Spacing)*_hasStopSideSwitch(dir)*Transit_Lane_Width: Bus_Lane_Stencil_Setup(dir)
+																|1:NIL}}
+									
+									 |6.5: ApproachMarkings(dir,0,1,Richtungspfeil_End)
+									 #|6.5: ApproachMarkings(dir,0,1,Stop_Begin)
+									 |0.5:Asphalt("Transit","bus_lane") }
+															#|.1:MainLaneMarkingLODChoice(0,split.index,"_stripes_white")}#|PaintLineWidth*_PaintLineControl("Left", Transit_Paint_Line_Sides ):AsphaltPainted("yellow","Transit","bus_lane")}
+			BusOnLane(dir)
+		case dir==2:
+			alignScopeToAxes(y)
+			split(u,unitSpace,0){~1:split(v,unitSpace,0){#PaintLineWidth*_PaintLineControl("Right", Transit_Paint_Line_Sides ):AsphaltPainted("yellow","Transit","bus_lane")
+															#Level 1-First split indentatio	
+															~1:Asphalt("Transit","bus_lane") split(u,unitSpace,0){1:NIL
+																#Level 2- sub-split indentation
+																| Transit_Lane_Width: Bus_Lane_Stencil_Setup(dir)
+																|~ Transit_Symbol_Spacing :NIL
+																|{ Transit_Lane_Width : Bus_Lane_Stencil_Setup(dir)
+																|~ Transit_Symbol_Spacing :NIL}*
+																#| _tooShort(geometry.du(0,unitSpace),Transit_Symbol_Spacing)*_hasStopSideSwitch(dir)*Transit_Lane_Width: Bus_Lane_Stencil_Setup(dir)
+																|1:NIL}}
+									
+									 #|6.5: ApproachMarkings(dir,0,1,Richtungspfeil)
+									 |6.5: ApproachMarkings(dir,0,1,Stop_End)
+									 }#|0.5:Asphalt("Transit","bus_lane") }
+															#|.1:MainLaneMarkingLODChoice(0,split.index,"_stripes_white")}#|PaintLineWidth*_PaintLineControl("Left", Transit_Paint_Line_Sides ):AsphaltPainted("yellow","Transit","bus_lane")}
+			BusOnLane(dir)
+		else:
+			alignScopeToAxes(y)
+			split(u,unitSpace,0){~1:split(v,unitSpace,0){#PaintLineWidth*_PaintLineControl("Right", Transit_Paint_Line_Sides ):AsphaltPainted("yellow","Transit","bus_lane")
+															#Level 1-First split indentatio	
+															~1:Asphalt("Transit","bus_lane") split(u,unitSpace,0){1:NIL
+																#Level 2- sub-split indentation
+																| Transit_Lane_Width: Bus_Lane_Stencil_Setup(dir)
+																|~ Transit_Symbol_Spacing :NIL
+																|{ Transit_Lane_Width : Bus_Lane_Stencil_Setup(dir)
+																|~ Transit_Symbol_Spacing :NIL}*
+																#| _tooShort(geometry.du(0,unitSpace),Transit_Symbol_Spacing)*_hasStopSideSwitch(dir)*Transit_Lane_Width: Bus_Lane_Stencil_Setup(dir)
+																|1:NIL}}
+									
+									 #|6.5: ApproachMarkings(dir,0,1,Richtungspfeil)
+									 |6.5: ApproachMarkings(dir,0,1,Stop_Begin)
+									} #|0.5:Asphalt("Transit","bus_lane") }
+															#|.1:MainLaneMarkingLODChoice(0,split.index,"_stripes_white")}#|PaintLineWidth*_PaintLineControl("Left", Transit_Paint_Line_Sides ):AsphaltPainted("yellow","Transit","bus_lane")}
+			BusOnLane(dir)
 
 Bus_Bike_Lane_Texture_Rule(dir)--> 
 	alignScopeToAxes(y)
@@ -2201,34 +2504,34 @@ Light_Rail_Lane_Texture(dir)-->
 		case Fussgaengeruebergang=="true":
 			#print("ja")
 			color( _ThematicRouter ("Transit"))
-			split(u, unitSpace, 0){0.75:split(v,unitSpace,0){1.075: Rail_Pavement|
+			split(u, unitSpace, 0){0.75:split(v,unitSpace,0){~1.075: Rail_Pavement|
 								 Rail_Depth*3:Rail_Inset|
 								 Track_Gauge-Rail_Depth*4:Rail_Pavement  |
 								 Rail_Depth*3:Rail_Inset|
-								 1.075: Rail_Pavement }
-				|5:split(v,unitSpace,0){1.075: Crosswalk("Continental",dir)|
+								 ~1.075: Rail_Pavement }
+				|5:split(v,unitSpace,0){~1.075: Crosswalk("Continental",dir)|
 								 Rail_Depth*3:Rail_Inset|
 								 Track_Gauge-Rail_Depth*4:Crosswalk("Continental",dir)|
 								 Rail_Depth*3:Rail_Inset|
-								 1.075: Crosswalk("Continental",dir) }
+								~ 1.075: Crosswalk("Continental",dir) }
 				#Crosswalk("Continental",dir)
 				#TODO 41.5 ersetzen mit section length?
-				|~41.5:split(v,unitSpace,0){1.075: Rail_Pavement|
+				|~41.5:split(v,unitSpace,0){~1.075: Rail_Pavement|
 								 Rail_Depth*3:Rail_Inset|
 								 Track_Gauge-Rail_Depth*4:Rail_Pavement  |
 								 Rail_Depth*3:Rail_Inset|
-								 1.075: Rail_Pavement }
-				|5:split(v,unitSpace,0){1.075: Crosswalk("Continental",dir)|
+								 ~1.075: Rail_Pavement }
+				|5:split(v,unitSpace,0){~1.075: Crosswalk("Continental",dir)|
 								 Rail_Depth*3:Rail_Inset|
 								 Track_Gauge-Rail_Depth*4:Crosswalk("Continental",dir)|
 								 Rail_Depth*3:Rail_Inset|
-								 1.075: Crosswalk("Continental",dir) }
+								 ~1.075: Crosswalk("Continental",dir) }
 
-				|0.75:split(v,unitSpace,0){1.075: Rail_Pavement|
+				|0.75:split(v,unitSpace,0){~1.075: Rail_Pavement|
 								 Rail_Depth*3:Rail_Inset|
 								 Track_Gauge-Rail_Depth*4:Rail_Pavement  |
 								 Rail_Depth*3:Rail_Inset|
-								 1.075: Rail_Pavement }
+								 ~1.075: Rail_Pavement }
 				}
 			
 			#ConventionalLane(2,1,0,"none")
@@ -2274,19 +2577,19 @@ Metal_Texture--> #Ground Textured Rule
 	Delete_Texture
 	
 Tempo_30_Stencil_Setup(dir)-->
-	case Transit_Lane=="Zone 30":
-		split(u,unitSpace,0){~1:NIL
-							|3:split(v,unitSpace,0) {(Transit_Lane_Width-2)/2: NIL|2:Tempo_30_Stencil(dir)|~1: NIL}
-							|~1:NIL}
-	else:
+
 		split(u,unitSpace,0){~1:NIL
 							|2:split(v,unitSpace,0) {(Transit_Lane_Width-2)/2: NIL|2:Tempo_30_Stencil(dir)|~1: NIL}
 							|~1:NIL}
-		
-	
-	
+							
+Zone_30_Stencil_Setup(dir)-->
+		split(u,unitSpace,0){~1:NIL
+							|3:split(v,unitSpace,0) {(Transit_Lane_Width-2)/2: NIL|2:Zone_30_Stencil(dir)|~1: NIL}
+							|~1:NIL}
+							
+
 Tempo_30_Stencil(dir)--> #Ground Textured Rule
-	case Transit_Lane=="Tempo 30":
+	#case Transit_Lane=="Tempo 30":
 		scaleUV(0,1,DirectionalFlip)# Will flip with a change in driving direction
 	 	rotateUV(0,90)
 	 	normalizeUV(0, uv, collectiveAllFaces)	
@@ -2296,7 +2599,9 @@ Tempo_30_Stencil(dir)--> #Ground Textured Rule
 		reverseNormals()
 		#color(255,255,0)
 		comp (f) {top= AsphaltPaintedStencil("white" ,"Transit","bus_lane")}
-	else:
+	
+Zone_30_Stencil(dir)--> #Ground Textured Rule
+
 		scaleUV(0,1,DirectionalFlip)# Will flip with a change in driving direction
 	 	rotateUV(0,90)
 	 	normalizeUV(0, uv, collectiveAllFaces)	
@@ -2306,7 +2611,7 @@ Tempo_30_Stencil(dir)--> #Ground Textured Rule
 		reverseNormals()
 		#color(255,255,0)
 		comp (f) {top= AsphaltPaintedStencil("white" ,"Transit","bus_lane")}
-	
+		
 
 Bus_Lane_Stencil_Setup(dir)-->
 	split(u,unitSpace,0){~1:NIL
@@ -2415,80 +2720,176 @@ BikeBasicLane(sideflip,Width)-->
 		
 BikeLane(sideflip,Width)-->#Was Left,now both, fairly modular
 	case Fussgaengeruebergang=="true":
-		alignScopeToAxes(y)
+		case Stop_Begin_Velo=="Wartelinien" || Stop_End_Velo=="Wartelinien" || Stop_End_Velo=="line only" || Stop_End_Velo=="line only":
+			alignScopeToAxes(y)
+				Bikes((case sideflip==1:0 else: 2),(case _Twoway_Bikelane_Bool:Width/2 else: Width),bikeProb)
+				color( _ThematicRouter ("Bikeways"))#If Display Thematics==Usage, goes to usage, if not, Thematic. 
+				scaleUV(0,sideflip,sideflip)
+				split(u,unitSpace,0){.75:Asphalt("Auto","asphalt")
+									|5:Crosswalk("Continental",0)
+									|~1:split(v,unitSpace,0){radstreifen_width*_PaintLineControl("Left", Bike_Paint_Line_Sides):Bike_Striped_Centerline
+															#Level 1-First split indentation
+															|~1:split(u,unitSpace,0){2:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane")
+																#Level 2- sub-split indentation
+																| Width*L_to_W_Ratio_Bk:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane") BikeLaneStencils(Width)
+																|~ Bike_Symbol_Spacing :AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane")
+																|{Width*L_to_W_Ratio_Bk:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane") BikeLaneStencils(Width)
+																|~ Bike_Symbol_Spacing :AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane")}*
+																| _tooShort(geometry.du(0,unitSpace)-Bike_Conflict_Spacing,Bike_Symbol_Spacing)*_hasStopSideSwitch((case sideflip==1:0 else: 2))* Width*L_to_W_Ratio_Bk:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane") BikeLaneStencils(Width)
+																| Bike_Conflict_Spacing :ConflictZone(Bike_Lane_Color)
+																|~1:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane")
+																|0.3:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane") BikeLaneStencilsWartelinie(Width)} 
+															 
+															}#|radstreifen_width*_PaintLineControl("Right", Bike_Paint_Line_Sides):Bike_Striped_Centerline}
+									|5:Crosswalk("Continental",0)
+									|0.75:Asphalt("Auto","asphalt")}
+		else:
+			alignScopeToAxes(y)
+				Bikes((case sideflip==1:0 else: 2),(case _Twoway_Bikelane_Bool:Width/2 else: Width),bikeProb)
+				color( _ThematicRouter ("Bikeways"))#If Display Thematics==Usage, goes to usage, if not, Thematic. 
+				scaleUV(0,sideflip,sideflip)
+				split(u,unitSpace,0){.75:Asphalt("Auto","asphalt")
+									|5:Crosswalk("Continental",0)
+									|~1:split(v,unitSpace,0){radstreifen_width*_PaintLineControl("Left", Bike_Paint_Line_Sides):Bike_Striped_Centerline
+															#Level 1-First split indentation
+															|~1:split(u,unitSpace,0){2:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane")
+																#Level 2- sub-split indentation
+																| Width*L_to_W_Ratio_Bk:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane") BikeLaneStencils(Width)
+																|~ Bike_Symbol_Spacing :AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane")
+																|{Width*L_to_W_Ratio_Bk:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane") BikeLaneStencils(Width)
+																|~ Bike_Symbol_Spacing :AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane")}*
+																| _tooShort(geometry.du(0,unitSpace)-Bike_Conflict_Spacing,Bike_Symbol_Spacing)*_hasStopSideSwitch((case sideflip==1:0 else: 2))* Width*L_to_W_Ratio_Bk:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane") BikeLaneStencils(Width)
+																| Bike_Conflict_Spacing :ConflictZone(Bike_Lane_Color)
+																|~1:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane")} 
+															}#|radstreifen_width*_PaintLineControl("Right", Bike_Paint_Line_Sides):Bike_Striped_Centerline}
+									|5:Crosswalk("Continental",0)
+									|0.75:Asphalt("Auto","asphalt")}
+	case Bike_Lane_Type=="Two-way":
+		case Stop_Begin_Velo=="Wartelinien" || Stop_End_Velo=="Wartelinien" || Stop_Begin_Velo=="line only" || Stop_End_Velo=="line only":
+		
+			alignScopeToAxes(y)
 			Bikes((case sideflip==1:0 else: 2),(case _Twoway_Bikelane_Bool:Width/2 else: Width),bikeProb)
 			color( _ThematicRouter ("Bikeways"))#If Display Thematics==Usage, goes to usage, if not, Thematic. 
 			scaleUV(0,sideflip,sideflip)
-			split(u,unitSpace,0){.75:Asphalt("Auto","asphalt")
-								|5:Crosswalk("Continental",0)
-								|~1:split(v,unitSpace,0){radstreifen_width*_PaintLineControl("Left", Bike_Paint_Line_Sides):Bike_Striped_Centerline
-														#Level 1-First split indentation
-														|~1:split(u,unitSpace,0){2:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane")
-															#Level 2- sub-split indentation
-															| Width*L_to_W_Ratio_Bk:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane") BikeLaneStencils(Width)
-															|~ Bike_Symbol_Spacing :AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane")
-															|{Width*L_to_W_Ratio_Bk:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane") BikeLaneStencils(Width)
-															|~ Bike_Symbol_Spacing :AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane")}*
-															| _tooShort(geometry.du(0,unitSpace)-Bike_Conflict_Spacing,Bike_Symbol_Spacing)*_hasStopSideSwitch((case sideflip==1:0 else: 2))* Width*L_to_W_Ratio_Bk:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane") BikeLaneStencils(Width)
-															| Bike_Conflict_Spacing :ConflictZone(Bike_Lane_Color)
-															|~1:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane")} 
-														}#|radstreifen_width*_PaintLineControl("Right", Bike_Paint_Line_Sides):Bike_Striped_Centerline}
-								|5:Crosswalk("Continental",0)
-								|0.75:Asphalt("Auto","asphalt")}
-	case Bike_Lane_Type=="Two-way":
-		alignScopeToAxes(y)
-		Bikes((case sideflip==1:0 else: 2),(case _Twoway_Bikelane_Bool:Width/2 else: Width),bikeProb)
-		color( _ThematicRouter ("Bikeways"))#If Display Thematics==Usage, goes to usage, if not, Thematic. 
-		scaleUV(0,sideflip,sideflip)
-		split(v,unitSpace,0){#radstreifen_width*_PaintLineControl("Left", Bike_Paint_Line_Sides):Bike_Striped_Centerline
-								#Level 1-First split indentation
-								~1:split(u,unitSpace,0){2:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane")
-									#Level 2- sub-split indentation
-									| Width*L_to_W_Ratio_Bk:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane") BikeLaneStencils(Width)
-									|~ Bike_Symbol_Spacing :AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane")
-									|{Width*L_to_W_Ratio_Bk:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane") BikeLaneStencils(Width)
-									|~ Bike_Symbol_Spacing :AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane")}*
-									| _tooShort(geometry.du(0,unitSpace)-Bike_Conflict_Spacing,Bike_Symbol_Spacing)*_hasStopSideSwitch((case sideflip==1:0 else: 2))* Width*L_to_W_Ratio_Bk:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane") BikeLaneStencils(Width)
-									| Bike_Conflict_Spacing :ConflictZone(Bike_Lane_Color)
-									|~1:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane")} 
-								}#|radstreifen_width*_PaintLineControl("Right", Bike_Paint_Line_Sides):Bike_Striped_Centerline}
-		
+			split(v,unitSpace,0){#radstreifen_width*_PaintLineControl("Left", Bike_Paint_Line_Sides):Bike_Striped_Centerline
+									#Level 1-First split indentation
+									~1:split(u,unitSpace,0){2:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane")
+										#Level 2- sub-split indentation
+										| Width*L_to_W_Ratio_Bk:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane") BikeLaneStencils(Width)
+										|~ Bike_Symbol_Spacing :AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane")
+										|{Width*L_to_W_Ratio_Bk:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane") BikeLaneStencils(Width)
+										|~ Bike_Symbol_Spacing :AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane")}*
+										| _tooShort(geometry.du(0,unitSpace)-Bike_Conflict_Spacing,Bike_Symbol_Spacing)*_hasStopSideSwitch((case sideflip==1:0 else: 2))* Width*L_to_W_Ratio_Bk:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane") BikeLaneStencils(Width)
+										| Bike_Conflict_Spacing :ConflictZone(Bike_Lane_Color)
+										|~1:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane")
+										|0.6:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane") BikeLaneStencilsWartelinie(Width)} 
+									}#|radstreifen_width*_PaintLineControl("Right", Bike_Paint_Line_Sides):Bike_Striped_Centerline}
+		else:
+			
+			alignScopeToAxes(y)
+			Bikes((case sideflip==1:0 else: 2),(case _Twoway_Bikelane_Bool:Width/2 else: Width),bikeProb)
+			color( _ThematicRouter ("Bikeways"))#If Display Thematics==Usage, goes to usage, if not, Thematic. 
+			scaleUV(0,sideflip,sideflip)
+			split(v,unitSpace,0){#radstreifen_width*_PaintLineControl("Left", Bike_Paint_Line_Sides):Bike_Striped_Centerline
+									#Level 1-First split indentation
+									~1:split(u,unitSpace,0){2:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane")
+										#Level 2- sub-split indentation
+										| Width*L_to_W_Ratio_Bk:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane") BikeLaneStencils(Width)
+										|~ Bike_Symbol_Spacing :AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane")
+										|{Width*L_to_W_Ratio_Bk:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane") BikeLaneStencils(Width)
+										|~ Bike_Symbol_Spacing :AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane")}*
+										| _tooShort(geometry.du(0,unitSpace)-Bike_Conflict_Spacing,Bike_Symbol_Spacing)*_hasStopSideSwitch((case sideflip==1:0 else: 2))* Width*L_to_W_Ratio_Bk:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane") BikeLaneStencils(Width)
+										| Bike_Conflict_Spacing :ConflictZone(Bike_Lane_Color)
+										|~1:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane")} 
+									}#|radstreifen_width*_PaintLineControl("Right", Bike_Paint_Line_Sides):Bike_Striped_Centerline}
+			
 	case Center_Type=="White Stripe Centerline":
 		#print("ja")
-		alignScopeToAxes(y)
-		Bikes((case sideflip==1:0 else: 2),(case _Twoway_Bikelane_Bool:Width/2 else: Width),bikeProb)
-		color( _ThematicRouter ("Bikeways"))#If Display Thematics==Usage, goes to usage, if not, Thematic. 
-		scaleUV(0,sideflip,sideflip)
-		split(v,unitSpace,0){radstreifen_width*_PaintLineControl("Left", Bike_Paint_Line_Sides):Bike_Striped_Centerline
-								#Level 1-First split indentation
-								|~1:split(u,unitSpace,0){2:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane")
-									#Level 2- sub-split indentation
-									| Width*L_to_W_Ratio_Bk:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane") BikeLaneStencils(Width)
-									|~ Bike_Symbol_Spacing :AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane")
-									|{Width*L_to_W_Ratio_Bk:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane") BikeLaneStencils(Width)
-									|~ Bike_Symbol_Spacing :AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane")}*
-									| _tooShort(geometry.du(0,unitSpace)-Bike_Conflict_Spacing,Bike_Symbol_Spacing)*_hasStopSideSwitch((case sideflip==1:0 else: 2))* Width*L_to_W_Ratio_Bk:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane") BikeLaneStencils(Width)
-									| Bike_Conflict_Spacing :ConflictZone(Bike_Lane_Color)
-									|~1:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane")} 
-								}#|radstreifen_width*_PaintLineControl("Right", Bike_Paint_Line_Sides):Bike_Striped_Centerline}
+		case Stop_Begin_Velo=="Wartelinien" || Stop_End_Velo=="Wartelinien" || Stop_Begin_Velo=="line only" || Stop_End_Velo=="line only":
+			#print("drin")
+			alignScopeToAxes(y)
+			Bikes((case sideflip==1:0 else: 2),(case _Twoway_Bikelane_Bool:Width/2 else: Width),bikeProb)
+			color( _ThematicRouter ("Bikeways"))#If Display Thematics==Usage, goes to usage, if not, Thematic. 
+			scaleUV(0,sideflip,sideflip)
+			
+			split(v,unitSpace,0){radstreifen_width*_PaintLineControl("Left", Bike_Paint_Line_Sides):Bike_Striped_Centerline
+									#Level 1-First split indentation
+									
+									|~1:split(u,unitSpace,0){
+									
+									2:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane")
+										#Level 2- sub-split indentation
+										#| 0.6:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane") BikeLaneStencilsWartelinie(Width)
+										#|~ 1 :AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane")
+										|{Width*L_to_W_Ratio_Bk:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane") BikeLaneStencils(Width)
+										|~ Bike_Symbol_Spacing :AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane")}*
+																				| _tooShort(geometry.du(0,unitSpace)-Bike_Conflict_Spacing,Bike_Symbol_Spacing)*_hasStopSideSwitch((case sideflip==1:0 else: 2))* Width*L_to_W_Ratio_Bk:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane") BikeLaneStencils(Width)
+										| Bike_Conflict_Spacing :ConflictZone(Bike_Lane_Color)
+										|~1:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane")
+										#|~ 1 :AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane")
+										| 0.3:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane") BikeLaneStencilsWartelinie(Width)
+										} 
+									}#|radstreifen_width*_PaintLineControl("Right", Bike_Paint_Line_Sides):Bike_Striped_Centerline}
+		else:
+			alignScopeToAxes(y)
+				Bikes((case sideflip==1:0 else: 2),(case _Twoway_Bikelane_Bool:Width/2 else: Width),bikeProb)
+				color( _ThematicRouter ("Bikeways"))#If Display Thematics==Usage, goes to usage, if not, Thematic. 
+				scaleUV(0,sideflip,sideflip)
+				
+				split(v,unitSpace,0){radstreifen_width*_PaintLineControl("Left", Bike_Paint_Line_Sides):Bike_Striped_Centerline
+										#Level 1-First split indentation
+										
+										|~1:split(u,unitSpace,0){
+										
+										2:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane")
+											#Level 2- sub-split indentation
+											#| Width*L_to_W_Ratio_Bk:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane") BikeLaneStencils(Width)
+											#|~ Bike_Symbol_Spacing :AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane")
+											|{Width*L_to_W_Ratio_Bk:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane") BikeLaneStencils(Width)
+											|~ Bike_Symbol_Spacing :AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane")}*
+											| _tooShort(geometry.du(0,unitSpace)-Bike_Conflict_Spacing,Bike_Symbol_Spacing)*_hasStopSideSwitch((case sideflip==1:0 else: 2))* Width*L_to_W_Ratio_Bk:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane") BikeLaneStencils(Width)
+											| Bike_Conflict_Spacing :ConflictZone(Bike_Lane_Color)
+											|~1:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane")} 
+										}#|radstreifen_width*_PaintLineControl("Right", Bike_Paint_Line_Sides):Bike_Striped_Centerline}
+			
 	else:
-		alignScopeToAxes(y)
-		Bikes((case sideflip==1:0 else: 2),(case _Twoway_Bikelane_Bool:Width/2 else: Width),bikeProb)
-		color( _ThematicRouter ("Bikeways"))#If Display Thematics==Usage, goes to usage, if not, Thematic. 
-		scaleUV(0,sideflip,sideflip)
-		split(v,unitSpace,0){radstreifen_width*_PaintLineControl("Left", Bike_Paint_Line_Sides):Bike_Striped_Centerline
-								#Level 1-First split indentation
-								|~1:split(u,unitSpace,0){2:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane")
-									#Level 2- sub-split indentation
-									| Width*L_to_W_Ratio_Bk:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane") BikeLaneStencils(Width)
-									|~ Bike_Symbol_Spacing :AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane")
-									|{Width*L_to_W_Ratio_Bk:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane") BikeLaneStencils(Width)
-									|~ Bike_Symbol_Spacing :AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane")}*
-									| _tooShort(geometry.du(0,unitSpace)-Bike_Conflict_Spacing,Bike_Symbol_Spacing)*_hasStopSideSwitch((case sideflip==1:0 else: 2))* Width*L_to_W_Ratio_Bk:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane") BikeLaneStencils(Width)
-									| Bike_Conflict_Spacing :ConflictZone(Bike_Lane_Color)
-									|~1:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane")} 
-								}#|radstreifen_width*_PaintLineControl("Right", Bike_Paint_Line_Sides):Bike_Striped_Centerline}
-		
+		case Stop_Begin_Velo=="Wartelinien" || Stop_End_Velo=="Wartelinien" || Stop_Begin_Velo=="line only" || Stop_End_Velo=="line only":
+			alignScopeToAxes(y)
+			Bikes((case sideflip==1:0 else: 2),(case _Twoway_Bikelane_Bool:Width/2 else: Width),bikeProb)
+			color( _ThematicRouter ("Bikeways"))#If Display Thematics==Usage, goes to usage, if not, Thematic. 
+			scaleUV(0,sideflip,sideflip)
+			split(v,unitSpace,0){radstreifen_width*_PaintLineControl("Left", Bike_Paint_Line_Sides):Bike_Striped_Centerline
+									#Level 1-First split indentation
+									|~1:split(u,unitSpace,0){2:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane")
+										#Level 2- sub-split indentation
+										| Width*L_to_W_Ratio_Bk:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane") BikeLaneStencils(Width)
+										|~ Bike_Symbol_Spacing :AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane")
+										|{Width*L_to_W_Ratio_Bk:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane") BikeLaneStencils(Width)
+										|~ Bike_Symbol_Spacing :AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane")}*
+										| _tooShort(geometry.du(0,unitSpace)-Bike_Conflict_Spacing,Bike_Symbol_Spacing)*_hasStopSideSwitch((case sideflip==1:0 else: 2))* Width*L_to_W_Ratio_Bk:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane") BikeLaneStencils(Width)
+										| Bike_Conflict_Spacing :ConflictZone(Bike_Lane_Color)
+										|~1:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane")
+										|0.3:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane") BikeLaneStencilsWartelinie(Width)} 
+										 
+									}#|radstreifen_width*_PaintLineControl("Right", Bike_Paint_Line_Sides):Bike_Striped_Centerline}
+		else:
+			alignScopeToAxes(y)
+			Bikes((case sideflip==1:0 else: 2),(case _Twoway_Bikelane_Bool:Width/2 else: Width),bikeProb)
+			color( _ThematicRouter ("Bikeways"))#If Display Thematics==Usage, goes to usage, if not, Thematic. 
+			scaleUV(0,sideflip,sideflip)
+			split(v,unitSpace,0){radstreifen_width*_PaintLineControl("Left", Bike_Paint_Line_Sides):Bike_Striped_Centerline
+									#Level 1-First split indentation
+									|~1:split(u,unitSpace,0){~2:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane")
+										#Level 2- sub-split indentation
+										| Width*L_to_W_Ratio_Bk:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane") BikeLaneStencils(Width)
+										|~ Bike_Symbol_Spacing :AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane")
+										|{Width*L_to_W_Ratio_Bk:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane") BikeLaneStencils(Width)
+										|~ Bike_Symbol_Spacing :AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane")}*
+										| _tooShort(geometry.du(0,unitSpace)-Bike_Conflict_Spacing,Bike_Symbol_Spacing)*_hasStopSideSwitch((case sideflip==1:0 else: 2))* Width*L_to_W_Ratio_Bk:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane") BikeLaneStencils(Width)
+										| Bike_Conflict_Spacing :ConflictZone(Bike_Lane_Color)
+										|~1:AsphaltPainted(Bike_Lane_Color,"Bikeways","bike_lane")} 
+									}#|radstreifen_width*_PaintLineControl("Right", Bike_Paint_Line_Sides):Bike_Striped_Centerline}
+				
 BikeLaneCenterSpace -->
     case Mittellinie == "Gestrichelt":
 		Bike_Striped_Centerline
@@ -2501,15 +2902,37 @@ BikeLaneLines-->
 						|Bike_Conflict_Spacing:ConflictZone("yellow")
 						|1:AsphaltPainted("yellow","Bikeways","bike_lane")}
 
+BikeLaneStencilsWartelinie(Stamp_Width)-->
+	case Stop_Begin=="line only" || Stop_End=="line only":
+		split(v,unitSpace,0){~1:extrude(0.01)AsphaltPainted("yellow","Bikeways","bike_lane")}
+	else:
+		split(v,unitSpace,0) {'0.1:NIL
+				  				 |~1:split(u,unitSpace,0){#'0.9:NIL
+				  					 0.6:BikeLaneSymbolStencilWartelinie
+				  					 }#|'0.15:NIL}
+								  |'0.1:NIL}
 BikeLaneStencils(Stamp_Width)-->
-	alignScopeToGeometry (zUp, largest, 0)
-	#alignScopeToGeometry(yUp,largest,0)
-	#normalizeUV(0,uv,collectiveAllFaces)
-	split(v,unitSpace,0) {~Stamp_Width/10:NIL|
-						 {1:split(u,unitSpace,0){1.5:BikeLaneSymbolStencil|
-											 ~1:NIL
-											 }|
-						 ~Stamp_Width/10:NIL}}
+		
+	case velosymbol=="simpel":
+		alignScopeToGeometry (zUp, largest, 0)
+		#alignScopeToGeometry(yUp,largest,0)
+		#normalizeUV(0,uv,collectiveAllFaces)
+		
+		split(v,unitSpace,0) {~Stamp_Width/10:NIL|
+							 {1:split(u,unitSpace,0){1:BikeLaneSymbolStencil|
+												 ~1:NIL
+												 }|
+							 ~Stamp_Width/10:NIL}}
+	else:
+		alignScopeToGeometry (zUp, largest, 0)
+		#alignScopeToGeometry(yUp,largest,0)
+		#normalizeUV(0,uv,collectiveAllFaces)
+		
+		split(v,unitSpace,0) {~Stamp_Width/10:NIL|
+							 {1:split(u,unitSpace,0){1.5:BikeLaneSymbolStencil|
+												 ~1:NIL
+												 }|
+							 ~Stamp_Width/10:NIL}}
 BikeLaneArrowSetUp--> 
 	split(v,unitSpace,0) {~1:NIL|~1:BikeLaneArrowStencil|~1:NIL}
 
@@ -2521,9 +2944,38 @@ BikeLaneArrowStencil-->
 	#cleanupGeometry(all, 0.001) 
 	comp (f) {top:AsphaltPaintedStencil("red" ,"Bikeways","bike_lane")}
 	
-
+BikeLaneSymbolStencilWartelinie--> #Ground Textured Rule
+		case Right_Bike_Lane_Width/2>1.5 || Left_Bike_Lane_Width/2>1.5:
+			scaleUV(0,1,DirectionalFlip)# Will flip with a change in driving direction
+			mirror(true, false, false)
+			rotateUV(0, -90)
+			normalizeUV(0, uv, collectiveAllFaces)
+			extrude(0.01)
+			insertAlongUV(0, StencilFolder+"/wartelinien.obj",0)
+			cleanupGeometry(all, 0.001) 
+			comp (f) {top:AsphaltPaintedStencil(Stencil_Color,"Bikeways","bike_lane")}
+		else:
+			scaleUV(0,1,DirectionalFlip)# Will flip with a change in driving direction
+			mirror(true, false, false)
+			rotateUV(0, -90)
+			normalizeUV(0, uv, collectiveAllFaces)
+			extrude(0.01)
+			insertAlongUV(0, StencilFolder+"/wartelinien_kurz.obj",0)
+			cleanupGeometry(all, 0.001) 
+			comp (f) {top:AsphaltPaintedStencil(Stencil_Color,"Bikeways","bike_lane")}
+			
 BikeLaneSymbolStencil--> #Ground Textured Rule
-	
+
+	case velosymbol=="simpel":
+		scaleUV(0,1,DirectionalFlip)# Will flip with a change in driving direction
+		mirror(true, false, false)
+		rotateUV(0, -90)
+		normalizeUV(0, uv, collectiveAllFaces)
+		extrude(0.01)
+		insertAlongUV(0, StencilFolder+"/velo_ch.obj",0)
+		cleanupGeometry(all, 0.001) 
+		comp (f) {top:AsphaltPaintedStencil(Stencil_Color,"Bikeways","bike_lane")}
+		
 	case velosymbol=="gerade":
 		normalizeUV(0, uv, collectiveAllFaces)
 		scaleUV(0,1,DirectionalFlip)# Will flip with a change in driving direction
@@ -3089,11 +3541,11 @@ Striped_Centerline-->
 	#split(u,unitSpace,0){3: CenterLineMarkings("white","Auto","centerline")|6:Asphalt("Auto","asphalt")}
 	case Transit_Lane=="Bus Lane":
 		split(u,unitSpace,0){ _stopBegin*5: CenterLineMarkings("yellow","Auto","centerline")
-							| ~1		   : split(u,unitSpace,0){{3: CenterLineMarkings("yellow","Auto","centerline")|3:Asphalt("Bus","transit_lane")}*}
+							| ~1		   : split(u,unitSpace,0){{3: CenterLineMarkings("yellow","Auto","centerline")|3:Asphalt("Auto","asphalt")}*}
 							| _stopEnd*5  : CenterLineMarkings("yellow","Auto","centerline") }
 	else:
 		split(u,unitSpace,0){ _stopBegin*5: CenterLineMarkings("white","Auto","centerline")
-							| ~1		   : split(u,unitSpace,0){{3: CenterLineMarkings("white","Auto","centerline")|3:Asphalt("Bus","transit_lane")}*}
+							| ~1		   : split(u,unitSpace,0){{3: CenterLineMarkings("white","Auto","centerline")|3:Asphalt("Auto","asphalt")}*}
 							| _stopEnd*5  : CenterLineMarkings("white","Auto","centerline") }
 				
 MedianWTurnLane-->
@@ -3222,7 +3674,13 @@ Boulevard_Tram-->
 	
 
 Boulevard_StopBars(dir)-->
-	case Boulevard_Configuration=="Tram Lanes":
+	case Boulevard_Configuration=="Tram Lanes"&&Inselhaltestelle=="beidseitig":
+		case dir==0:
+			split(u,unitSpace,0) {~1:Transit_Lane_Reporting(dir)}
+		else:
+			split(u,unitSpace,0) {~1:scaleUV(0,-1,-1)Transit_Lane_Reporting(dir)}
+		
+	case Boulevard_Configuration=="Tram Lanes"&&Inselhaltestelle!="beidseitig":
 		case dir==0:
 			split(u,unitSpace,0) {~1:Transit_Lane_Reporting(dir)|_stopEnd*ThickPaintLineWidth:AsphaltPainted("white","Auto","stop_bar")}
 		else:
@@ -3671,10 +4129,10 @@ Haltestellen_Einstieg_Insert(Object_Identity,File_Extension,RotationAng,Translat
 				#print("hm")
 				alignScopeToAxes(z)
 				alignScopeToGeometry(zUp, largest, 0)
-				rotate(abs, world, 0, Haltestelle_Rotation_rechts, 0)
+				rotate(abs, world, 0, Haltestelle_Rotation_rechts,0)
 				#rotateUV(10,0)
 				center(xz)
-				t(Haltestelle_Translate_X_rechts,0,-Haltestelle_Translate_Z_rechts)
+				t(Haltestelle_Translate_X_rechts,Haltestelle_Translate_Y_rechts,-Haltestelle_Translate_Z_rechts)
 				#t(-34,0,5)
 				#scaleUV(0,0.5,0.5)
 				#report("Objects."+Object_Identity+" Count",1)
@@ -3687,7 +4145,7 @@ Haltestellen_Einstieg_Insert(Object_Identity,File_Extension,RotationAng,Translat
 				alignScopeToGeometry(zUp, largest, 0)
 				rotate(abs, world, 0, Haltestelle_Rotation_links, 0)
 				center(xz)
-				t(Haltestelle_Translate_X_links,0,-Haltestelle_Translate_Z_links)
+				t(Haltestelle_Translate_X_links,Haltestelle_Translate_Y_links,-Haltestelle_Translate_Z_links)
 				#t(18,0,-3.2)
 				#scaleUV(0,0.5,0.5)
 				#report("Objects."+Object_Identity+" Count",1)
@@ -3703,7 +4161,7 @@ Haltestellen_Einstieg_Insert(Object_Identity,File_Extension,RotationAng,Translat
 				#r(0,Haltestelle_Rotation,0)
 				rotate(abs, world, 0, Haltestelle_Rotation_rechts, 0)
 				center(xz)
-				t(Haltestelle_Translate_X_rechts,0,-Haltestelle_Translate_Z_rechts)
+				t(Haltestelle_Translate_X_rechts,Haltestelle_Translate_Y_rechts,-Haltestelle_Translate_Z_rechts)
 				#t(-10.5,0,0)
 				#scaleUV(0,0.5,0.5)
 				#report("Objects."+Object_Identity+" Count",1)
@@ -3716,7 +4174,7 @@ Haltestellen_Einstieg_Insert(Object_Identity,File_Extension,RotationAng,Translat
 				alignScopeToGeometry(zUp, largest, 0)
 				rotate(abs, world, 0, Haltestelle_Rotation_links, 0)
 				center(xz)
-				t(Haltestelle_Translate_X_links,0,-Haltestelle_Translate_Z_links)
+				t(Haltestelle_Translate_X_links,Haltestelle_Translate_Y_links,-Haltestelle_Translate_Z_links)
 				#t(10,0,0)
 				#scaleUV(0,0.5,0.5)
 				#report("Objects."+Object_Identity+" Count",1)
@@ -4126,10 +4584,13 @@ CrosswalkContintental -->
 						  
 		
 	else:
-		split(v,uvSpace,0){ (ceil(geometry.vMin-0.01)-geometry.vMin): Asphalt("Conflict Zones","crosswalk")
-						  | ~1: CrosswalkStripes(0.5)
-						  | geometry.vMax-floor(geometry.vMax+0.01): Asphalt("Conflict Zones","crosswalk") }
-
+		split(v,uvSpace,0){#1: Asphalt("Auto","asphalt")
+							#Crosswalk_Width:split(v,uvSpace,0){ 
+							(ceil(geometry.vMin-0.01)-geometry.vMin): Asphalt("Conflict Zones","crosswalk")
+												  
+												  | ~1: CrosswalkStripes(0.5)
+												  | geometry.vMax-floor(geometry.vMax+0.01): Asphalt("Conflict Zones","crosswalk") }
+							#}
 CrosswalkLadder(uvSet) -->
 	split(u,uvSpace,uvSet){ 0.17: AsphaltPainted( Crosswalk_Color,"Conflict Zones","crosswalk") 
 						  | ~1  : CrosswalkStripes(1)
@@ -4755,7 +5216,7 @@ Bench_Insert-->
 	
 Bike_Rack_Insert-->
 	case SBike_Rack_Toggle:
- 		t( SBike_Rack_Translate_X ,0, SBike_Rack_Translate_Z )
+ 		t( SBike_Rack_Translate_X ,SBike_Rack_Translate_Y, SBike_Rack_Translate_Z )
 		i(Bike_Rack_Object)
 		scaleUV(0,0,0)
 		#set(material.name,"Bike_Rack")
