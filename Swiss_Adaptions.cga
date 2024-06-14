@@ -8,7 +8,7 @@
 # ESRI Attribution License:
 #	ESRI Derivative work
 #	http://mappingcenter.esri.com/downloads/AttributionAndLicense_05_09_07.pdf
-#
+# Copyright 2024 Elisa Szalay
 # Complete Street Rule with Copyright 2020 David J. Wasserman
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -348,7 +348,7 @@ attr Traffic_Lights						= case Not_High_LOD: "None" else: "Both"
 attr Sidewalk_Way_Finder				="false"
 @Order(12)@Enum("true","false") @Description("Will create 2 bike racks near a bus stop.")#@Hidden
 attr Sidewalk_Bike_Rack					="false"
-@Order(13)@Enum("None","Fahrverbot","Tempo 30","Tempo 50","Stop","Fahrverbot_Auto_Töff","Fussgängerstreifen","Hauptstrasse","Hauptstrasse_aufgehoben","50 generell","Veloweg","Veloweg aufgehoben", "Velofussweg geteilt","Velofussweg getrennt","Vortritt","Einbahn gerade", "Einbahn gerade rechts", "Einbahn links", "Einbahn links rechts", "Einbahn rechts", "Einfahrt verboten") @Description("Will create 2 bike racks near a bus stop.")#@Hidden
+@Order(13)@Enum("None","Fahrverbot","Tempo 30","Tempo 50","Stop","Fahrverbot_Auto_TÃ¶ff","FussgÃ¤ngerstreifen","Hauptstrasse","Hauptstrasse_aufgehoben","50 generell","Veloweg","Veloweg aufgehoben", "Velofussweg geteilt","Velofussweg getrennt","Vortritt","Einbahn gerade", "Einbahn gerade rechts", "Einbahn links", "Einbahn links rechts", "Einbahn rechts", "Einfahrt verboten") @Description("Will create 2 bike racks near a bus stop.")#@Hidden
 attr Street_Sign					="None"
 
 @Group("POPULATION",80) @Range(min=0,max=300,restricted=false) @Order(1) 
@@ -657,7 +657,7 @@ const Default_Street_Sign_Tempo30_Object = (ObjectFolder+ "/SM_Sign_CH_T_30.glb"
 const Default_Street_Sign_Fahrverbot_Object = (ObjectFolder+ "/SM_Sign_CH_Fahrverbot_Auto_Toeff_Mofa.glb")
 const Default_Street_Sign_Stop_Object = (ObjectFolder+ "/SM_Sign_CH_Stop.glb")
 const Default_Street_Sign_Fahrverbot_Auto_Toeff_Object = (ObjectFolder+ "/SM_Sign_CH_Fahrverbot_Auto_Toeff_Mofa.glb")
-const Default_Street_Sign_Fussgaengerstreifen_Object = (ObjectFolder+ "/SM_Sign_CH_Fussgängerstreifen.glb")
+const Default_Street_Sign_Fussgaengerstreifen_Object = (ObjectFolder+ "/SM_Sign_CH_FussgÃ¤ngerstreifen.glb")
 const Default_Street_Sign_Hauptstrasse_Object = (ObjectFolder+ "/SM_Sign_CH_Hauptstrasse.glb")
 const Default_Street_Sign_Hauptstrasse_aufgehoben_Object = (ObjectFolder+ "/SM_Sign_CH_Hauptstrasse_aufgehoben.glb")
 const Default_Street_Sign_50_generell_Object = (ObjectFolder+ "/SM_Sign_CH_T_50_generell.glb")
@@ -1121,7 +1121,7 @@ _arrowStencilChoice(stopCode)=
 	case stopCode =="stop":
 		case rightHandTraffic: "Stop_Symbol.obj" else:"Stop_Symbol_Mirrored.obj"	  
 	case stopCode=="hai":
-		"wartelinien.obj" #haifischzähne
+		"wartelinien.obj" #haifischzÃ¤hne
 	case stopCode=="rg":
 		"pfeilneu_rechts.obj" #gerade,rechts
 	case stopCode=="lg":
@@ -3955,16 +3955,16 @@ Street_Pavement(Boulevard_Side,Location,Dir)-->
 		
 General_Sidewalk_Texture--> #Ground Textured Rule	
 	case Transit_Lane=="Light Rail Lane":
-		#einfügen, falls untergrund wie miv strasse
+		#einfÃ¼gen, falls untergrund wie miv strasse
 		texture( LanesFolder+"/"+Asphalt_Base)
 		ProjectPBRTextures(LanesFolder+"/"+Asphalt_Base,"Auto","asphalt",true)
-		#löschen, falls untergrund wie miv strasse
+		#lÃ¶schen, falls untergrund wie miv strasse
 		#texture(Sidewalk_Texture)
 		projectUV(0)
 		scaleUV(0, Sidewalk_Texture_Scale, Sidewalk_Texture_Scale)
 		rotateUV(0, Sidewalk_Texture_Rotation)
 	    set(material.metallic,1.0)
-	    #löschen, falls untergrund wie miv strasse
+	    #lÃ¶schen, falls untergrund wie miv strasse
 		#Delete_Texture
 	else:
 		texture(Sidewalk_Texture)
@@ -5032,11 +5032,11 @@ Parking_Meter_Loader(Parking_Length,Dir)-->
 						 |(_Sidewalk_CrossStop_Gap(Dir,"End")):NIL}
 
 Street_Sign_Loader(Parking_Length,Dir)-->
-	case Street_Sign=="Fahrverbot_Auto_Töff":
+	case Street_Sign=="Fahrverbot_Auto_TÃ¶ff":
 			split(u,unitSpace,0) {(_Sidewalk_CrossStop_Gap(Dir,"Begin") + Parking_Meter_Setback):NIL # moves starting point for meters into near middle
 								 |.1:Sign_Objects_Insert("Parking Meter",Street_Sign_Fahrverbot_Auto_Toeff_Object,0,0,.3,1.4,.3)
 								 |(_Sidewalk_CrossStop_Gap(Dir,"End")):NIL}
-	case Street_Sign=="Fussgängerstreifen":
+	case Street_Sign=="FussgÃ¤ngerstreifen":
 		split(u,unitSpace,0) {(_Sidewalk_CrossStop_Gap(Dir,"Begin") + Parking_Meter_Setback):NIL # moves starting point for meters into near middle
 							 |.1:Sign_Objects_Insert("Parking Meter",Street_Sign_Fussgaengerstreifen_Object,0,0,.3,1.4,.3)
 							 |(_Sidewalk_CrossStop_Gap(Dir,"End")):NIL}
